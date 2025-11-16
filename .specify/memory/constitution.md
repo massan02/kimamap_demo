@@ -1,147 +1,147 @@
-<!-- Sync Impact Report: Constitution v1.0.0
-Version: 0.0.0 → 1.0.0 (MINOR: Initial constitution creation with project principles)
-Added Principles:
-  1. Clean Foundation - Minimal-first, phased development approach
-  2. Strict Type Safety - TypeScript strict mode, minimal 'any' usage
-  3. Simplicity First - YAGNI principle, avoid over-abstraction
-  4. Latest Stable Stack - Test-proven stable versions
-  5. Testing & Quality - TDD approach, comprehensive test coverage
-Added Sections:
-  - Development Practices (platform conventions, naming, patterns)
-  - Code Quality Standards (TypeScript, React Native, Express guidelines)
-  - Governance (amendment procedure, versioning, compliance)
-Templates Updated: ✅ spec-template.md, plan-template.md, tasks-template.md
-Follow-up: None (all placeholders resolved)
+<!-- 同期インパクトレポート: 憲法 v1.0.0
+バージョン: 0.0.0 → 1.0.0 (MINOR: プロジェクト原則を含む初期憲法作成)
+追加された原則:
+  1. クリーンな基盤 - 最小構成ファースト、段階的開発アプローチ
+  2. 厳密な型安全性 - TypeScript strict モード、最小限の 'any' 使用
+  3. シンプル優先 - YAGNI原則、過度な抽象化を避ける
+  4. 最新安定版スタック - テスト済みの安定版を採用
+  5. テスト・品質 - TDD アプローチ、包括的なテストカバレッジ
+追加されたセクション:
+  - 開発プラクティス（プラットフォーム規約、命名、パターン）
+  - コード品質基準（TypeScript、React Native、Express ガイドライン）
+  - ガバナンス（修正手続き、バージョニング、準拠性確認）
+テンプレート更新: ✅ spec-template.md, plan-template.md, tasks-template.md
+フォローアップ: なし（すべてのプレースホルダーが解決済み）
 -->
 
-# Kimamap（気ままっぷ）Constitution
+# 気ままっぷ（Kimamap）憲法
 
-## Core Principles
+## 中核原則
 
-### I. Clean Foundation
-Start minimal and expand phase by phase. Kimamap development follows a strict phased approach where each phase builds a complete, testable feature set.
+### I. クリーンな基盤
+最小構成から始めて段階的に拡張します。気ままっぷ開発は厳密な段階的アプローチに従い、各フェーズで完全でテスト可能な機能セットを構築します。
 
-**Non-negotiable rules:**
-- Phase 1 establishes project foundation (Expo, Navigation, Authentication)
-- Each Phase MUST include end-to-end testing and manual QA
-- New features only added when previous phase is stable and documented
-- No premature optimization or over-engineering for future scenarios
-- Rationale: Prevents scope creep, ensures early feedback, maintains code quality as project grows
+**妥協できないルール:**
+- フェーズ1 はプロジェクト基盤を確立（Expo、ナビゲーション、認証）
+- 各フェーズは **必須** エンドツーエンドテストと手動QAを含む
+- 前のフェーズが安定かつ文書化されるまで、新機能は追加しない
+- 先制的な最適化や将来のシナリオへの過度なエンジニアリングはしない
+- 根拠: スコープクリープを防止、初期フィードバックを確保、プロジェクト成長に伴うコード品質を維持
 
-### II. Strict Type Safety
-All TypeScript code MUST use `strict: true` mode. Type safety is non-negotiable and enforced at build time.
+### II. 厳密な型安全性
+すべてのTypeScriptコードは `strict: true` モードを使用 **必須** です。型安全性は非妥協的でありビルド時に強制されます。
 
-**Non-negotiable rules:**
-- `any` type usage is prohibited except in exceptional cases with explicit justification
-- All async operations MUST have proper return types
-- Props and return values MUST be fully typed
-- Use type aliases (not interfaces) for consistency across the project
-- Rationale: Prevents runtime errors, improves refactoring safety, enables IDE tooling benefits
+**妥協できないルール:**
+- `any` 型の使用は禁止（明示的な正当化がある例外的な場合を除く）
+- すべての非同期操作は適切な戻り値の型を **必須** にする
+- Props と戻り値は完全に型付けされるべき
+- インターフェースではなく type alias を使用（プロジェクト全体で一貫性を保つため）
+- 根拠: ランタイムエラーを防止、リファクタリング安全性の向上、IDE ツール機能の恩恵
 
-### III. Simplicity First
-Avoid over-abstraction. Follow YAGNI principle: only build what is needed now, not what might be needed later.
+### III. シンプル優先
+過度な抽象化を避けます。YAGNI 原則に従う: 今必要なものだけ構築し、後で必要になるかもしれないものは構築しない。
 
-**Non-negotiable rules:**
-- No architectural patterns beyond what immediate problem requires
-- Prefer straightforward component logic over complex state management until actually needed
-- No custom utilities without clear, repeated use case
-- Code review focuses on simplicity: if feature can be implemented simpler, it MUST be simplified
-- Rationale: Reduces maintenance burden, speeds up initial development, makes codebase more understandable
+**妥協できないルール:**
+- 即座の問題を超えたアーキテクチャパターンは不要
+- 実際に必要になるまで、複雑な状態管理よりもシンプルなコンポーネントロジックを優先
+- 明確で繰り返される使用ケースのないカスタムユーティリティはなし
+- コードレビューはシンプル性に焦点: 機能がよりシンプルに実装できる場合は必須で簡素化する
+- 根拠: メンテナンス負担を削減、初期開発を高速化、コードベースの理解度を向上
 
-### IV. Latest Stable Stack
-Use thoroughly tested, stable versions of dependencies (as of January 2025).
+### IV. 最新安定版スタック
+徹底的にテストされ、安定したバージョンの依存関係を使用（2025年1月時点）。
 
-**Non-negotiable rules:**
-- React Native 0.81.x (not rc, not experimental)
-- Expo SDK 54.0.x (not beta versions)
-- Express 5.1.0 (LTS support, explicit error handling)
-- TypeScript 5.9.x with `node20` target
-- Supabase JS Client 2.81.x (no pre-release versions)
-- Never use experimental features for core functionality
-- Rationale: Ensures stability, long-term support, documented ecosystem, reduces surprise breaking changes
+**妥協できないルール:**
+- React Native 0.81.x（rc や実験的ではなく）
+- Expo SDK 54.0.x（ベータバージョンではなく）
+- Express 5.1.0（LTSサポート、明示的なエラーハンドリング）
+- TypeScript 5.9.x with `node20` ターゲット
+- Supabase JS Client 2.81.x（プレリリースバージョンなし）
+- コア機能に実験的機能を使用しない
+- 根拠: 安定性を確保、長期サポート、文書化されたエコシステム、予期しない破壊的変更を削減
 
-### V. Testing & Quality
-Quality is built in through continuous testing. All features require test coverage before merge.
+### V. テスト・品質
+品質は継続的なテストを通じて組み込まれます。すべての機能はマージ前にテストカバレッジが必須です。
 
-**Non-negotiable rules:**
-- TDD approach: write tests or specs before implementation
-- Unit tests for business logic (AI planning algorithm, data transformations)
-- Integration tests for API endpoints and cross-component flows
-- Manual QA before each phase completion
-- Code review verifies test coverage (minimum 80% for critical paths)
-- Rationale: Catches bugs early, documents expected behavior, enables safe refactoring
+**妥協できないルール:**
+- TDD アプローチ: 実装前にテストまたは仕様を作成
+- ビジネスロジック用のユニットテスト（AI計画アルゴリズム、データ変換）
+- APIエンドポイントとクロスコンポーネントフローのための統合テスト
+- 各フェーズ完了前の手動QA
+- コードレビューはテストカバレッジを確認（重要パス最小80%）
+- 根拠: 早期にバグを捕捉、期待される動作を文書化、安全なリファクタリングを可能にする
 
-## Development Practices
+## 開発プラクティス
 
-### TypeScript Conventions
-- Configuration: `strict: true` enforced
-- Files: Utility functions are camelCase (e.g., `formatDate.ts`), classes/types are PascalCase
-- All async functions explicitly return `Promise<Type>`
-- Use type alias pattern: `type MyType = {...}` preferred over `interface`
+### TypeScript 規約
+- 設定: `strict: true` が強制されます
+- ファイル: ユーティリティ関数は camelCase（例: `formatDate.ts`）、クラス/型は PascalCase
+- すべての非同期関数は明示的に `Promise<Type>` を返す
+- type alias パターンを使用: `type MyType = {...}` を `interface` より優先
 
-### React Native Standards
-- Functional components with Hooks (no class components)
-- Styling: `StyleSheet.create()` for all style definitions
-- Platform branching: Use `Platform.OS` for platform-specific code
-- Single Responsibility: Each component handles one feature/concern
-- Props: Interface/type for all component props
+### React Native 標準
+- 関数コンポーネント with Hooks（クラスコンポーネントなし）
+- スタイリング: すべてのスタイル定義に `StyleSheet.create()` を使用
+- プラットフォーム分岐: プラットフォーム固有のコードに `Platform.OS` を使用
+- 単一責任: 各コンポーネントは1つの機能/関心事を処理
+- Props: すべてのコンポーネント props に対してインターフェース/型を定義
 
-### Express 5 Standards
-- Leverage async/await automatic error handling (errors passed to `next()`)
-- No try/catch required for route handlers
-- All endpoints return JSON with consistent error shape
-- Request validation with Zod schemas before business logic
-- Type-safe route definitions
+### Express 5 標準
+- 非同期/待機の自動エラーハンドリングを活用（エラーが `next()` に渡される）
+- ルートハンドラーで try/catch は不要
+- すべてのエンドポイントは一貫したエラー形式の JSON を返す
+- ビジネスロジック前に Zod スキーマでリクエスト検証
+- 型安全なルート定義
 
-### Naming Conventions
-- **Components**: PascalCase (e.g., `MapScreen.tsx`, `LocationMarker.tsx`)
-- **Utilities/Services**: camelCase (e.g., `formatDate.ts`, `fetchSpots.ts`)
-- **Constants**: SCREAMING_SNAKE_CASE (e.g., `API_ENDPOINTS.ts`)
-- **React files**: Always use `.tsx` for components, `.ts` for utilities
+### 命名規則
+- **コンポーネント**: PascalCase（例: `MapScreen.tsx`、`LocationMarker.tsx`）
+- **ユーティリティ/サービス**: camelCase（例: `formatDate.ts`、`fetchSpots.ts`）
+- **定数**: SCREAMING_SNAKE_CASE（例: `API_ENDPOINTS.ts`）
+- **React ファイル**: コンポーネントは常に `.tsx` を使用、ユーティリティは `.ts` を使用
 
-## Code Quality Standards
+## コード品質基準
 
-### TypeScript Rules
-- No `any` type without documented exception
-- All DOM/React type imports explicit
-- Discriminated unions for complex state
-- `readonly` for immutable data structures
-- Exhaustiveness checking for enums/union types
+### TypeScript ルール
+- 文書化された例外がない限り `any` 型なし
+- すべての DOM/React 型インポートは明示的
+- 複雑な状態の判別合併
+- 不変データ構造に `readonly` を使用
+- 列挙型/共用体型の網羅性チェック
 
-### React Native Rules
-- Functional components and Hooks mandatory
-- Minimize re-renders with proper dependency arrays
-- Use `React.memo()` for expensive components
-- StyleSheet usage prevents dynamic style injection attacks
-- Platform-specific code isolated and tested on both platforms
+### React Native ルール
+- 関数コンポーネントと Hooks は必須
+- 適切な依存配列で再レンダリングを最小化
+- 高コストなコンポーネントに `React.memo()` を使用
+- StyleSheet 使用により動的スタイルインジェクション攻撃を防止
+- プラットフォーム固有のコードは分離かつテスト
 
-### Express Rules
-- Every endpoint validates input with Zod
-- Error response format: `{ error: string, code: string, details?: unknown }`
-- TypeScript enables inline API documentation
-- No synchronous file operations in route handlers
-- CORS explicitly configured
+### Express ルール
+- すべてのエンドポイントは Zod でインプット検証
+- エラーレスポンス形式: `{ error: string, code: string, details?: unknown }`
+- TypeScript により インライン API ドキュメンテーション可能
+- ルートハンドラーでの同期ファイル操作なし
+- CORS は明示的に設定
 
-## Governance
+## ガバナンス
 
-### Amendment Procedure
-Constitution changes require explicit reasoning and version bump:
-- **MAJOR (X.0.0)**: Removes principle or changes existing principle fundamentally
-- **MINOR (X.Y.0)**: Adds new principle or substantially expands guidance
-- **PATCH (X.Y.Z)**: Clarifications, wording fixes, non-semantic refinements
+### 修正手続き
+憲法の変更は明示的な根拠とバージョンバンプが必須:
+- **MAJOR (X.0.0)**: 原則を削除するか、既存原則を根本的に変更
+- **MINOR (X.Y.0)**: 新しい原則を追加するか、ガイダンスを大幅に拡張
+- **PATCH (X.Y.Z)**: 明確化、表現修正、非セマンティック改善
 
-All amendments MUST be documented in this file with rationale before implementation begins.
+すべての修正は実装開始前にこのファイルに根拠を記載する **必須** です。
 
-### Compliance & Review
-- Every PR verifies alignment with Core Principles I-V
-- Code review explicitly checks compliance with applicable standards
-- Phase completion gates include constitution compliance verification
-- Technical decisions outside this constitution require team discussion and explicit approval
+### 準拠性・レビュー
+- すべての PR は中核原則 I-V との整合性を確認
+- コードレビューは適用可能な基準との準拠を明示的にチェック
+- フェーズ完了ゲートには憲法準拠性確認を含む
+- この憲法の外の技術的決定はチーム討議と明示的な承認が必須
 
-### Versioning Policy
-- Version format: MAJOR.MINOR.PATCH
-- Constitution version increments with changes
-- Previous versions archived in `.specify/memory/constitution-history/`
-- Runtime guidance in `CLAUDE.md` and `PRIORITY.md` must align with constitution
+### バージョニングポリシー
+- バージョン形式: MAJOR.MINOR.PATCH
+- 憲法バージョンは変更で増分
+- 前のバージョンは `.specify/memory/constitution-history/` にアーカイブ
+- `CLAUDE.md` と `PRIORITY.md` の実行時ガイダンスは憲法と整合する **必須**
 
-**Version**: 1.0.0 | **Ratified**: 2025-11-16 | **Last Amended**: 2025-11-16
+**バージョン**: 1.0.0 | **採択日**: 2025-11-16 | **最終修正日**: 2025-11-16
