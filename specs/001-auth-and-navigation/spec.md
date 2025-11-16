@@ -1,124 +1,124 @@
-# Feature Specification: User Authentication and App Basic Structure
+# 機能仕様書: ユーザー認証とアプリ基本構造
 
-**Feature Branch**: `001-auth-and-navigation`
-**Created**: 2025-11-16
-**Status**: Draft
-**Input**: User description: "ユーザー認証とアプリ基本構造。Googleログイン、セッション管理、3画面のボトムタブナビゲーション（地図・保存済み・マイページ）、ログアウト機能を提供する"
+**機能ブランチ**: `001-auth-and-navigation`
+**作成日**: 2025-11-16
+**ステータス**: ドラフト
+**入力**: ユーザー説明: "ユーザー認証とアプリ基本構造。Googleログイン、セッション管理、3画面のボトムタブナビゲーション（地図・保存済み・マイページ）、ログアウト機能を提供する"
 
-## User Scenarios & Testing *(mandatory)*
+## ユーザーシナリオとテスト *(必須)*
 
-### User Story 1 - First-Time Google Login (Priority: P1)
+### ユーザーストーリー 1 - 初回Googleログイン (優先度: P1)
 
-A new user opens the Kimamap app for the first time and needs to sign in using their Google account to access the app's features.
+新規ユーザーが初めて気ままっぷアプリを開き、Googleアカウントでサインインしてアプリの機能にアクセスする必要がある。
 
-**Why this priority**: Authentication is the entry point to the entire application. Without this, users cannot access any features. This is the most critical user journey.
+**優先度の理由**: 認証はアプリケーション全体へのエントリーポイントです。これがなければ、ユーザーはどの機能にもアクセスできません。最も重要なユーザージャーニーです。
 
-**Independent Test**: Can be fully tested by launching the app, tapping the Google login button, completing OAuth flow, and verifying the user is presented with the main navigation interface. Delivers the core value of secure user access.
+**独立テスト**: アプリを起動し、Googleログインボタンをタップし、OAuthフローを完了し、ユーザーにメインナビゲーションインターフェースが表示されることを確認することで完全にテストできます。安全なユーザーアクセスというコア価値を提供します。
 
-**Acceptance Scenarios**:
+**受け入れシナリオ**:
 
-1. **Given** a new user opens the app, **When** they tap "Sign in with Google", **Then** they are redirected to Google's OAuth consent screen
-2. **Given** the user grants permissions on Google's consent screen, **When** they complete authentication, **Then** they are returned to the app and see the bottom tab navigation with three tabs (Map, Saved, My Page)
-3. **Given** the user is on Google's consent screen, **When** they cancel or deny permissions, **Then** they are returned to the login screen with a clear message explaining authentication is required
-4. **Given** a user completes Google login, **When** authentication succeeds, **Then** their basic profile information (name, email, profile picture) is available for display in the My Page section
-
----
-
-### User Story 2 - Navigation Between Main Screens (Priority: P2)
-
-An authenticated user needs to navigate between the three main sections of the app: Map (for exploring routes), Saved (for viewing saved routes), and My Page (for user profile and settings).
-
-**Why this priority**: Navigation is essential for accessing different app features. Once logged in, users need to explore different sections. This is the second most critical journey as it enables feature discovery.
-
-**Independent Test**: Can be fully tested by logging in and tapping each bottom tab, verifying that each screen loads correctly and the active tab indicator updates. Delivers the core navigation structure.
-
-**Acceptance Scenarios**:
-
-1. **Given** a user is logged in and viewing the Map screen, **When** they tap the "Saved" tab, **Then** the app navigates to the Saved screen and highlights the Saved tab indicator
-2. **Given** a user is on any screen, **When** they tap the "My Page" tab, **Then** the app navigates to the My Page screen and highlights the My Page tab indicator
-3. **Given** a user is on the Saved or My Page screen, **When** they tap the "Map" tab, **Then** the app navigates to the Map screen and highlights the Map tab indicator
-4. **Given** a user navigates between tabs, **When** they return to a previously viewed tab, **Then** the screen state is preserved (e.g., map position, scroll position)
+1. **前提** 新規ユーザーがアプリを開く、**操作** 「Googleでログイン」をタップする、**結果** GoogleのOAuth同意画面にリダイレクトされる
+2. **前提** ユーザーがGoogleの同意画面で権限を許可する、**操作** 認証を完了する、**結果** アプリに戻り、3つのタブ（地図、保存済み、マイページ）を持つボトムタブナビゲーションが表示される
+3. **前提** ユーザーがGoogleの同意画面にいる、**操作** キャンセルまたは権限を拒否する、**結果** ログイン画面に戻り、認証が必要であることを説明する明確なメッセージが表示される
+4. **前提** ユーザーがGoogleログインを完了する、**操作** 認証が成功する、**結果** 基本プロフィール情報（名前、メールアドレス、プロフィール画像）がマイページセクションに表示できるようになる
 
 ---
 
-### User Story 3 - Persistent Session (Priority: P3)
+### ユーザーストーリー 2 - メイン画面間のナビゲーション (優先度: P2)
 
-A user who previously logged in closes the app and reopens it later, expecting to remain logged in without having to authenticate again.
+認証済みユーザーがアプリの3つのメインセクション間を移動する必要がある：地図（ルート探索用）、保存済み（保存したルートの閲覧用）、マイページ（ユーザープロフィールと設定用）。
 
-**Why this priority**: Session persistence improves user experience by eliminating repetitive login steps. While important for usability, it's lower priority than initial authentication and navigation since users can still use the app without it.
+**優先度の理由**: ナビゲーションは異なるアプリ機能へのアクセスに不可欠です。ログイン後、ユーザーは異なるセクションを探索する必要があります。機能の発見を可能にするため、2番目に重要なジャーニーです。
 
-**Independent Test**: Can be fully tested by logging in, closing the app completely, reopening it, and verifying the user is automatically logged in and sees the last viewed screen. Delivers improved user convenience.
+**独立テスト**: ログインして各ボトムタブをタップし、各画面が正しく読み込まれ、アクティブタブインジケーターが更新されることを確認することで完全にテストできます。コアナビゲーション構造を提供します。
 
-**Acceptance Scenarios**:
+**受け入れシナリオ**:
 
-1. **Given** a user has logged in successfully, **When** they close the app and reopen it within 30 days, **Then** they remain authenticated and see the last viewed screen
-2. **Given** a user's session has expired (after 30 days), **When** they open the app, **Then** they are returned to the login screen
-3. **Given** a user is in the middle of the app, **When** the app is backgrounded and resumed, **Then** their session persists and they continue from where they left off
-4. **Given** a user's authentication token is invalid or revoked, **When** they open the app, **Then** they are securely logged out and returned to the login screen
-
----
-
-### User Story 4 - Secure Logout (Priority: P4)
-
-A user wants to sign out of the app to protect their privacy or switch accounts.
-
-**Why this priority**: Logout is important for security and privacy, but it's a less frequent action compared to login and navigation. Users typically only log out when switching accounts or on shared devices.
-
-**Independent Test**: Can be fully tested by logging in, navigating to My Page, tapping logout, and verifying the user is returned to the login screen and cannot access authenticated content. Delivers security and account switching capability.
-
-**Acceptance Scenarios**:
-
-1. **Given** a logged-in user is on the My Page screen, **When** they tap the "Logout" button, **Then** they are immediately logged out and returned to the login screen
-2. **Given** a user has logged out, **When** they attempt to access any authenticated screen (Map, Saved, My Page), **Then** they are redirected to the login screen
-3. **Given** a user logs out, **When** they reopen the app, **Then** they must authenticate again to access the app
-4. **Given** a user taps logout, **When** the logout process completes, **Then** all local session data is cleared and their authentication state is revoked
+1. **前提** ユーザーがログインして地図画面を表示している、**操作** 「保存済み」タブをタップする、**結果** アプリが保存済み画面に移動し、保存済みタブインジケーターがハイライトされる
+2. **前提** ユーザーがいずれかの画面にいる、**操作** 「マイページ」タブをタップする、**結果** アプリがマイページ画面に移動し、マイページタブインジケーターがハイライトされる
+3. **前提** ユーザーが保存済みまたはマイページ画面にいる、**操作** 「地図」タブをタップする、**結果** アプリが地図画面に移動し、地図タブインジケーターがハイライトされる
+4. **前提** ユーザーがタブ間を移動する、**操作** 以前に表示したタブに戻る、**結果** 画面の状態が保持される（例：地図の位置、スクロール位置）
 
 ---
 
-### Edge Cases
+### ユーザーストーリー 3 - セッションの永続化 (優先度: P3)
 
-- What happens when the user's internet connection is lost during Google login?
-- How does the system handle when Google OAuth returns an error or the user's Google account is suspended?
-- What happens when a user tries to access a tab that requires additional permissions (e.g., location for the Map screen)?
-- How does the app behave when the user revokes Google permissions from their Google account settings while still logged in?
-- What happens if session refresh fails while the user is actively using the app?
-- How does the app handle multiple rapid tab switches in the navigation?
+以前ログインしたユーザーがアプリを閉じて後で再度開いたとき、再認証せずにログイン状態が維持されることを期待する。
 
-## Requirements *(mandatory)*
+**優先度の理由**: セッションの永続化は、繰り返しのログイン手順を排除することでユーザー体験を向上させます。ユーザビリティにとって重要ですが、ユーザーはこれなしでもアプリを使用できるため、初回認証とナビゲーションよりも優先度は低くなります。
 
-### Functional Requirements
+**独立テスト**: ログインし、アプリを完全に閉じ、再度開き、ユーザーが自動的にログインされ、最後に表示した画面が表示されることを確認することで完全にテストできます。ユーザーの利便性向上を提供します。
 
-- **FR-001**: System MUST provide a Google Sign-In button on the initial login screen
-- **FR-002**: System MUST implement Google OAuth 2.0 authentication flow for user login
-- **FR-003**: System MUST securely store and manage user authentication tokens
-- **FR-004**: System MUST display a bottom tab navigation bar with three tabs: Map, Saved, and My Page
-- **FR-005**: Users MUST be able to switch between tabs by tapping on them
-- **FR-006**: System MUST visually indicate which tab is currently active
-- **FR-007**: System MUST persist user sessions across app restarts for a period of 30 days
-- **FR-008**: System MUST automatically refresh authentication tokens before expiration to maintain session continuity
-- **FR-009**: System MUST provide a logout button accessible from the My Page screen
-- **FR-010**: System MUST clear all local session data when a user logs out
-- **FR-011**: System MUST redirect unauthenticated users to the login screen when attempting to access protected content
-- **FR-012**: System MUST handle authentication errors gracefully with user-friendly error messages
-- **FR-013**: System MUST validate authentication tokens on app launch and session resume
-- **FR-014**: System MUST revoke user authentication state both locally and remotely during logout
-- **FR-015**: Each tab screen (Map, Saved, My Page) MUST load independently and display appropriate placeholder content during this initial implementation phase
+**受け入れシナリオ**:
 
-### Key Entities
+1. **前提** ユーザーが正常にログインしている、**操作** アプリを閉じて30日以内に再度開く、**結果** 認証状態が維持され、最後に表示した画面が表示される
+2. **前提** ユーザーのセッションが期限切れになっている（30日後）、**操作** アプリを開く、**結果** ログイン画面に戻される
+3. **前提** ユーザーがアプリを使用中である、**操作** アプリがバックグラウンドに移動し、再開される、**結果** セッションが維持され、中断した場所から継続できる
+4. **前提** ユーザーの認証トークンが無効または取り消されている、**操作** アプリを開く、**結果** 安全にログアウトされ、ログイン画面に戻される
 
-- **User**: Represents an authenticated app user with Google account information (unique identifier, email, display name, profile picture)
-- **Session**: Represents an active user authentication session (authentication token, refresh token, expiration timestamp, creation timestamp)
-- **Navigation State**: Represents the current tab selection and screen state for session persistence (active tab, screen-specific state data)
+---
 
-## Success Criteria *(mandatory)*
+### ユーザーストーリー 4 - 安全なログアウト (優先度: P4)
 
-### Measurable Outcomes
+ユーザーがプライバシーを保護するため、またはアカウントを切り替えるためにアプリからサインアウトしたい。
 
-- **SC-001**: Users can complete the Google login flow from app launch to seeing the main navigation in under 30 seconds
-- **SC-002**: 95% of users successfully authenticate on their first attempt
-- **SC-003**: Authenticated users can switch between all three tabs with transitions completing in under 500 milliseconds
-- **SC-004**: 90% of returning users remain authenticated and bypass the login screen
-- **SC-005**: Users who log out are successfully redirected to the login screen and cannot access authenticated content
-- **SC-006**: Session persistence works correctly for 99% of users who return within 30 days
-- **SC-007**: Authentication errors are presented with clear, actionable messages that help users resolve the issue
-- **SC-008**: The app handles network interruptions during authentication without crashing, providing appropriate retry mechanisms
+**優先度の理由**: ログアウトはセキュリティとプライバシーにとって重要ですが、ログインやナビゲーションと比較して頻度の低いアクションです。ユーザーは通常、アカウントを切り替える場合や共有デバイスでのみログアウトします。
+
+**独立テスト**: ログインし、マイページに移動し、ログアウトをタップし、ユーザーがログイン画面に戻され、認証済みコンテンツにアクセスできないことを確認することで完全にテストできます。セキュリティとアカウント切り替え機能を提供します。
+
+**受け入れシナリオ**:
+
+1. **前提** ログイン済みユーザーがマイページ画面にいる、**操作** 「ログアウト」ボタンをタップする、**結果** 即座にログアウトされ、ログイン画面に戻される
+2. **前提** ユーザーがログアウトした、**操作** 認証済み画面（地図、保存済み、マイページ）へのアクセスを試みる、**結果** ログイン画面にリダイレクトされる
+3. **前提** ユーザーがログアウトする、**操作** アプリを再度開く、**結果** アプリにアクセスするために再度認証する必要がある
+4. **前提** ユーザーがログアウトをタップする、**操作** ログアウト処理が完了する、**結果** すべてのローカルセッションデータがクリアされ、認証状態が取り消される
+
+---
+
+### エッジケース
+
+- Googleログイン中にユーザーのインターネット接続が失われた場合どうなるか？
+- Google OAuthがエラーを返したり、ユーザーのGoogleアカウントが停止されたりした場合、システムはどう処理するか？
+- ユーザーが追加の権限を必要とするタブ（地図画面の位置情報など）にアクセスしようとした場合どうなるか？
+- ユーザーがログイン中にGoogleアカウント設定からGoogle権限を取り消した場合、アプリはどう動作するか？
+- ユーザーがアプリを積極的に使用中にセッション更新が失敗した場合どうなるか？
+- ナビゲーションで複数のタブを素早く切り替えた場合、アプリはどう処理するか？
+
+## 要件 *(必須)*
+
+### 機能要件
+
+- **FR-001**: システムは初期ログイン画面にGoogleサインインボタンを提供しなければならない
+- **FR-002**: システムはユーザーログインのためにGoogle OAuth 2.0認証フローを実装しなければならない
+- **FR-003**: システムはユーザー認証トークンを安全に保存・管理しなければならない
+- **FR-004**: システムは3つのタブ（地図、保存済み、マイページ）を持つボトムタブナビゲーションバーを表示しなければならない
+- **FR-005**: ユーザーはタブをタップしてタブ間を切り替えられなければならない
+- **FR-006**: システムは現在アクティブなタブを視覚的に示さなければならない
+- **FR-007**: システムはアプリ再起動後もユーザーセッションを30日間維持しなければならない
+- **FR-008**: システムはセッションの継続性を維持するため、有効期限前に認証トークンを自動的に更新しなければならない
+- **FR-009**: システムはマイページ画面からアクセス可能なログアウトボタンを提供しなければならない
+- **FR-010**: システムはユーザーがログアウトした際にすべてのローカルセッションデータをクリアしなければならない
+- **FR-011**: システムは未認証ユーザーが保護されたコンテンツにアクセスしようとした場合、ログイン画面にリダイレクトしなければならない
+- **FR-012**: システムは認証エラーをユーザーフレンドリーなエラーメッセージで適切に処理しなければならない
+- **FR-013**: システムはアプリ起動時とセッション再開時に認証トークンを検証しなければならない
+- **FR-014**: システムはログアウト時にローカルとリモートの両方でユーザー認証状態を取り消さなければならない
+- **FR-015**: 各タブ画面（地図、保存済み、マイページ）は独立して読み込まれ、この初期実装フェーズでは適切なプレースホルダーコンテンツを表示しなければならない
+
+### 主要エンティティ
+
+- **ユーザー**: Googleアカウント情報（一意識別子、メールアドレス、表示名、プロフィール画像）を持つ認証済みアプリユーザーを表す
+- **セッション**: アクティブなユーザー認証セッション（認証トークン、リフレッシュトークン、有効期限タイムスタンプ、作成タイムスタンプ）を表す
+- **ナビゲーション状態**: セッション永続化のための現在のタブ選択と画面状態（アクティブタブ、画面固有の状態データ）を表す
+
+## 成功基準 *(必須)*
+
+### 測定可能な成果
+
+- **SC-001**: ユーザーはアプリ起動からメインナビゲーションの表示まで、Googleログインフローを30秒以内に完了できる
+- **SC-002**: ユーザーの95%が初回試行で認証に成功する
+- **SC-003**: 認証済みユーザーは3つのタブすべてを500ミリ秒以内の遷移で切り替えられる
+- **SC-004**: 再訪ユーザーの90%が認証状態を維持し、ログイン画面をバイパスする
+- **SC-005**: ログアウトしたユーザーはログイン画面にリダイレクトされ、認証済みコンテンツにアクセスできない
+- **SC-006**: セッションの永続化が30日以内に戻るユーザーの99%で正しく機能する
+- **SC-007**: 認証エラーは、ユーザーが問題を解決するのに役立つ明確で実行可能なメッセージで提示される
+- **SC-008**: アプリは認証中のネットワーク中断をクラッシュせずに処理し、適切な再試行メカニズムを提供する
