@@ -285,3 +285,10 @@ npx expo install --fix
 
 ##　回答の際の注意点
 - 常に日本語で回答し、ドキュメント類も日本語で記述すること
+
+## Active Technologies
+- TypeScript 5.9.x (strict mode) (001-auth-and-navigation)
+- Supabase (PostgreSQL) - ユーザー認証とセッション管理 (001-auth-and-navigation)
+
+## Recent Changes
+- 001-auth-and-navigation: Added TypeScript 5.9.x (strict mode)
