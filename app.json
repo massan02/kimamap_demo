@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "_kimamap_demo",
-    "slug": "_kimamap_demo",
+    "name": "kimamap_demo",
+    "slug": "kimamap-demo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
