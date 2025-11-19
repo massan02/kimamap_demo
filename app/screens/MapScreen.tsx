@@ -1,23 +1,31 @@
-// 1. 必要な部品をReactとReact Nativeから持ってくる
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-// 2. 関数コンポーネントを定義する（ファイル名と同じ名前にするのが通例）
+import { StyleSheet, View } from 'react-native';
+// 1. 地図の部品をインポート
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 export default function MapScreen() {
-  // 3. 見た目（JSX）を返す
   return (
-    // Viewは「箱（divのようなもの）」
     <View style={styles.container}>
-      {/* Textは「文字」 */}
-      <Text>ここはマップ画面です</Text>
+      {/* 2. MapViewコンポーネントを配置 */}
+      <MapView
+        style={styles.map}
+        provider={PROVIDER_GOOGLE} // Google Mapsを使う指定
+        // 3. 初期表示位置の設定（これがないと海が表示されることも）
+        initialRegion={{
+          latitude: 33.5902,  // 緯度（例：博多駅）
+          longitude: 130.4207, // 経度
+          latitudeDelta: 0.01, // ズームレベル（数字が小さいほど拡大）
+          longitudeDelta: 0.01,
+        }}
+      />
     </View>
   );
 }
-// 4. スタイル（見た目の設定）を定義する
 const styles = StyleSheet.create({
   container: {
-    flex: 1,             // 画面いっぱいに広げる
-    justifyContent: 'center', // 上下中央揃え
-    alignItems: 'center',     // 左右中央揃え
-    backgroundColor: '#fff',  // 背景色：白
+    flex: 1,
+  },
+  map: {
+    width: '100%',  // 横幅いっぱい
+    height: '100%', // 縦幅いっぱい
   },
 });
