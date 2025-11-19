@@ -1,0 +1,47 @@
+{
+  "name": "kimamap",
+  "license": "0BSD",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "tunnel": "expo start --tunnel",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
+  },
+  "dependencies": {
+    "@expo/ngrok": "^4.1.3",
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-picker/picker": "^2.11.0",
+    "@react-navigation/bottom-tabs": "^7.3.14",
+    "@react-navigation/native": "^7.1.14",
+    "@react-navigation/native-stack": "^7.3.21",
+    "@react-navigation/stack": "^7.3.3",
+    "@supabase/supabase-js": "^2.58.0",
+    "@tanstack/react-query": "^5.76.1",
+    "axios": "^1.10.0",
+    "ejs": "^3.1.10",
+    "expo": "~54.0.9",
+    "expo-auth-session": "^7.0.8",
+    "expo-font": "~13.3.1",
+    "expo-location": "~18.1.5",
+    "expo-status-bar": "~2.2.3",
+    "expo-web-browser": "~15.0.9",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-gesture-handler": "~2.24.0",
+    "react-native-maps": "1.20.1",
+    "react-native-paper": "^5.14.5",
+    "react-native-reanimated": "~3.17.4",
+    "react-native-safe-area-context": "5.4.0",
+    "react-native-screens": "~4.11.1",
+    "react-native-vector-icons": "^10.2.0",
+    "react-router-native": "^6.25.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@types/react": "^19.1.0",
+    "typescript": "~5.8.3"
+  },
+  "private": true
+}
