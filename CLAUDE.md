@@ -14,22 +14,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 現在の開発段階
 
-**Phase 1-2 完了**: ユーザー認証とアプリ基本構造が実装済み。最新コミット（4663bb5）では、Spec Kit 削除と Expo 最小構成への初期化を完了。
+**Learning Phase 完了 (Phase 1 & 2 部分実装済み)**:
+
+- **ナビゲーション**: BottomTabNavigator 実装済み（Map, Profile）
+- **地図**: Google Maps 表示、現在地取得・表示 実装済み
+- **バックエンド**: Supabase 接続設定完了、データ取得テスト完了
+- **認証**: Google OAuth 設定済み（実装は未完了）
 
 ### 次のフェーズ計画
 
-- **Phase 3**: マップ機能（`react-native-maps`, `expo-location`）
-- **Phase 4**: 状態管理・UI ライブラリの検討
+- **Phase 1-3 の残り**: ログイン画面、AuthContext の実装
+- **Phase 3**: 検索画面 UI、プラン作成ロジックの実装
 
 ## 技術スタック
 
 ### フロントエンド（実装済み）
 
 - **React Native**: 0.81.5
-- **Expo SDK**: 54.0.23
+- **Expo SDK**: 54.0.25
 - **React**: 19.1.0
 - **TypeScript**: 5.9.2
 - **Node.js**: 20.19.4 以上
+- **Navigation**: React Navigation v7
+- **Maps**: react-native-maps (Google Provider)
+- **Location**: expo-location
 
 ### 環境設定
 
@@ -37,11 +45,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 新アーキテクチャ有効（`app.json`: `newArchEnabled: true`）
 - Edge-to-Edge 対応（Android）、SafeArea 対応必須
 
-### バックエンド（将来）
+### バックエンド（実装中）
 
-- **Express**: 5.1.0（予定）
-- **Supabase JS Client**: 2.81.x
-- **Node.js**: 22 LTS 以上推奨
+- **Supabase**: Auth (Google OAuth), Database (PostgreSQL)
+- **Client**: @supabase/supabase-js
 
 ## よく使うコマンド
 
@@ -68,7 +75,7 @@ npx tsc --noEmit
 
 ## プロジェクト構造
 
-### 現在の構成（Phase 1-2 後）
+### 現在の構成
 
 ```
 kimamap_demo/
@@ -76,9 +83,16 @@ kimamap_demo/
 ├── index.ts                     # エントリーポイント
 ├── app.json                     # Expo設定
 ├── tsconfig.json                # TypeScript厳密設定
-├── package.json                 # 最小依存（Expo, React, TypeScript）
+├── package.json                 # 依存関係
 ├── .env                         # 環境変数（gitignore対象）
-├── .env.example                 # 環境変数テンプレート
+├── app/
+│   ├── lib/
+│   │   └── supabase.ts          # Supabase接続設定
+│   ├── navigation/
+│   │   └── BottomTabNavigator.tsx
+│   └── screens/
+│       ├── MapScreen.tsx        # 地図・現在地表示
+│       └── ProfileScreen.tsx    # データ取得テスト用
 ├── assets/                      # スプラッシュ, アイコン画像
 └── CLAUDE.md
 ```

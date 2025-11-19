@@ -1,23 +1,58 @@
 // 1. 必要な部品をReactとReact Nativeから持ってくる
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-// 2. 関数コンポーネントを定義する（ファイル名と同じ名前にするのが通例）
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
+import { supabase } from '../lib/supabase';
+
 export default function ProfileScreen() {
-  // 3. 見た目（JSX）を返す
+  const [data, setData] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    // test_dataテーブルから全てのカラム(*)を取得
+    const { data, error } = await supabase
+      .from('test_data')
+      .select('*');
+
+    if (error) {
+      console.error('Error fetching data:', error);
+    } else {
+      setData(data || []);
+    }
+  };
+
   return (
-    // Viewは「箱（divのようなもの）」
     <View style={styles.container}>
-      {/* Textは「文字」 */}
-      <Text>ここはプロフィール画面です</Text>
+      <Text style={styles.title}>Supabase Test Data</Text>
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <Text>{item.message}</Text>
+          </View>
+        )}
+      />
     </View>
   );
 }
-// 4. スタイル（見た目の設定）を定義する
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,             // 画面いっぱいに広げる
-    justifyContent: 'center', // 上下中央揃え
-    alignItems: 'center',     // 左右中央揃え
-    backgroundColor: '#fff',  // 背景色：白
+    flex: 1,
+    paddingTop: 50,
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  item: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
 });
