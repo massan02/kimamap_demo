@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import BottomTabNavigator from './app/navigation/BottomTabNavigator';
+import RootNavigator from './app/navigation/RootNavigator';
 import { AuthProvider, useAuth } from './app/contexts/AuthContext';
 import LoginScreen from './app/screens/LoginScreen';
 import { View, ActivityIndicator } from 'react-native';
@@ -20,8 +20,8 @@ function AppContent() {
 
   return (
     <NavigationContainer>
-      {/* セッションがあれば地図画面、なければログイン画面を表示 */}
-      {session ? <BottomTabNavigator /> : <LoginScreen />}
+      {/* セッションがあれば地図画面（RootNavigator）、なければログイン画面を表示 */}
+      {session ? <RootNavigator /> : <LoginScreen />}
     </NavigationContainer>
   );
 }

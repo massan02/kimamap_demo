@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Alert, TouchableOpacity, Text } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 export default function MapScreen() {
+  const navigation = useNavigation();
   const [region, setRegion] = useState<Region | null>(null);
   const [currentLocation, setCurrentLocation] = useState<Location.LocationObject | null>(null);
   const mapRef = useRef<MapView>(null);
@@ -69,6 +71,19 @@ export default function MapScreen() {
         }}
         showsUserLocation={true}
       />
+      
+      <TouchableOpacity 
+        style={styles.searchContainer} 
+        activeOpacity={0.9}
+        onPress={() => {
+          // @ts-ignore - Navigation type definition is pending
+          navigation.navigate('Search');
+        }}
+      >
+        <MaterialIcons name="search" size={24} color="#666" />
+        <Text style={styles.searchText}>どこに行きますか？</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={styles.fab}
         onPress={handleCenterLocation}
@@ -106,5 +121,29 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  searchContainer: {
+    position: 'absolute',
+    top: 60, // StatusBar height + padding
+    left: 16,
+    right: 16,
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  searchText: {
+    marginLeft: 8,
+    color: '#666',
+    fontSize: 16,
   },
 });
