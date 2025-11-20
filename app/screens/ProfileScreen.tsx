@@ -1,9 +1,10 @@
-// 1. 必要な部品をReactとReact Nativeから持ってくる
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext'; // 追加
 
 export default function ProfileScreen() {
+  const { session, signOut } = useAuth(); // 追加
   const [data, setData] = useState<any[]>([]);
 
   useEffect(() => {
@@ -11,7 +12,6 @@ export default function ProfileScreen() {
   }, []);
 
   const fetchData = async () => {
-    // test_dataテーブルから全てのカラム(*)を取得
     const { data, error } = await supabase
       .from('test_data')
       .select('*');
@@ -25,6 +25,14 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
+      {/* ユーザー情報とログアウトボタンを追加 */}
+      <View style={styles.header}>
+        <Text style={styles.email}>ログイン中: {session?.user?.email}</Text>
+        <TouchableOpacity style={styles.logoutButton} onPress={signOut}>
+          <Text style={styles.logoutText}>ログアウト</Text>
+        </TouchableOpacity>
+      </View>
+
       <Text style={styles.title}>Supabase Test Data</Text>
       <FlatList
         data={data}
@@ -44,6 +52,29 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 20,
+  },
+  // スタイル追加
+  header: {
+    marginBottom: 30,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    paddingBottom: 20,
+  },
+  email: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: '#333',
+  },
+  logoutButton: {
+    backgroundColor: '#ff4444',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+  },
+  logoutText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
   title: {
     fontSize: 24,
