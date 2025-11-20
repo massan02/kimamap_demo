@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     position: 'absolute',
-    top: 60, // StatusBar height + padding
+    top: 16, // ヘッダーに近づけて配置
     left: 16,
     right: 16,
     backgroundColor: 'white',
