@@ -9,13 +9,15 @@ import {
   Switch,
   KeyboardAvoidingView,
   Platform,
-  Alert
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as ExpoLocation from 'expo-location';
 import { useEffect } from 'react';
+import { createPlan } from '../services/api';
 
 type Transportation = 'walk' | 'bicycle' | 'car';
 
@@ -43,6 +45,7 @@ export default function SearchScreen() {
   const [duration, setDuration] = useState(120);
   const [returnToStart, setReturnToStart] = useState(false);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -65,7 +68,7 @@ export default function SearchScreen() {
     })();
   }, []);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!query.trim()) {
       Alert.alert('入力エラー', '行きたい場所ややりたいことを入力してください。');
       return;
@@ -84,8 +87,26 @@ export default function SearchScreen() {
       startingLocation: location,
     };
 
-    console.log('Search Data:', JSON.stringify(searchData, null, 2));
-    // TODO: Call API
+    setLoading(true);
+    try {
+      console.log('Sending request:', searchData);
+      const response = await createPlan(searchData);
+      console.log('Plan received:', response.plan);
+      
+      Alert.alert(
+        '成功', 
+        `プランを取得しました！\nタイトル: ${response.plan.title}\nスポット数: ${response.plan.spots.length}件\n総所要時間: ${response.plan.totalDuration}分`
+      );
+      
+      // TODO: Navigate to MapScreen with plan data
+      // navigation.navigate('Map', { plan: response.plan });
+      
+    } catch (error) {
+      console.error('Error creating plan:', error);
+      Alert.alert('エラー', 'プランの取得に失敗しました。サーバーが起動しているか確認してください。');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -191,9 +212,22 @@ export default function SearchScreen() {
         </ScrollView>
 
         <View style={styles.footer}>
-          <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-            <Text style={styles.searchButtonText}>プランを提案してもらう</Text>
-            <Ionicons name="sparkles" size={20} color="#fff" style={{ marginLeft: 8 }} />
+          <TouchableOpacity 
+            style={[styles.searchButton, loading && styles.searchButtonDisabled]} 
+            onPress={handleSearch}
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <ActivityIndicator color="#fff" />
+                <Text style={styles.searchButtonText}>処理中...</Text>
+              </>
+            ) : (
+              <>
+                <Text style={styles.searchButtonText}>プランを提案してもらう</Text>
+                <Ionicons name="sparkles" size={20} color="#fff" style={{ marginLeft: 8 }} />
+              </>
+            )}
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -345,6 +379,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 4,
+  },
+  searchButtonDisabled: {
+    backgroundColor: '#999',
+    opacity: 0.6,
   },
   searchButtonText: {
     color: '#fff',
