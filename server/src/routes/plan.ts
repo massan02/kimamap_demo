@@ -15,6 +15,8 @@ const PlanRequestSchema = z.object({
   }),
 });
 
+import spotsData from '../data/spots.json';
+
 // POST /api/plan
 router.post('/', async (req, res) => {
   try {
@@ -24,19 +26,23 @@ router.post('/', async (req, res) => {
     console.log('Received Plan Request:', validatedData);
 
     // TODO: Implement AI Logic (Phase 3-4)
-    // For now, return a dummy response
+    // For now, return the mock data
     
     res.status(200).json({
       message: "Plan request received",
-      data: validatedData,
-      // Mock plan data will be added in Phase 3-3
+      request: validatedData,
+      plan: {
+        title: "福岡観光プラン (Mock)",
+        spots: spotsData,
+        totalDuration: spotsData.reduce((acc, spot) => acc + spot.estimatedDuration, 0),
+      }
     });
 
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({
         error: "Validation Error",
-        details: error.issues, // ZodError uses .issues, or .errors depending on version/type, but usually .issues is safer or cast it
+        details: error.issues,
       });
     }
     

@@ -1,0 +1,262 @@
+[
+  {
+    "id": "spot_1",
+    "name": "福岡タワー",
+    "description": "福岡のシンボル的存在。地上123mの展望室からは福岡の街並みや博多湾を一望できます。",
+    "category": "sightseeing",
+    "location": {
+      "lat": 33.5932,
+      "lng": 130.3515
+    },
+    "estimatedDuration": 60,
+    "openingHours": "9:30-22:00",
+    "price": 800
+  },
+  {
+    "id": "spot_2",
+    "name": "大濠公園",
+    "description": "福岡市民の憩いの場。大きな池があり、ボートに乗ったり、ジョギングや散歩を楽しめます。",
+    "category": "activity",
+    "location": {
+      "lat": 33.5860,
+      "lng": 130.3764
+    },
+    "estimatedDuration": 90,
+    "openingHours": "24時間",
+    "price": 0
+  },
+  {
+    "id": "spot_3",
+    "name": "太宰府天満宮",
+    "description": "学問の神様、菅原道真公を祀る神社。梅の名所としても有名です。",
+    "category": "sightseeing",
+    "location": {
+      "lat": 33.5215,
+      "lng": 130.5349
+    },
+    "estimatedDuration": 90,
+    "openingHours": "6:00-19:00",
+    "price": 0
+  },
+  {
+    "id": "spot_4",
+    "name": "キャナルシティ博多",
+    "description": "運河が流れる大型複合商業施設。ショッピング、映画、食事などが楽しめます。",
+    "category": "activity",
+    "location": {
+      "lat": 33.5897,
+      "lng": 130.4108
+    },
+    "estimatedDuration": 120,
+    "openingHours": "10:00-21:00",
+    "price": 0
+  },
+  {
+    "id": "spot_5",
+    "name": "博多ラーメン ShinShin",
+    "description": "福岡に来たら外せない博多ラーメンの人気店。濃厚な豚骨スープが特徴です。",
+    "category": "food",
+    "location": {
+      "lat": 33.5916,
+      "lng": 130.3965
+    },
+    "estimatedDuration": 45,
+    "openingHours": "11:00-27:00",
+    "price": 1000
+  },
+  {
+    "id": "spot_6",
+    "name": "マリンワールド海の中道",
+    "description": "「九州の海」をテーマにした水族館。イルカショーやアシカショーが人気です。",
+    "category": "sightseeing",
+    "location": {
+      "lat": 33.6609,
+      "lng": 130.3614
+    },
+    "estimatedDuration": 120,
+    "openingHours": "9:30-17:30",
+    "price": 2500
+  },
+  {
+    "id": "spot_7",
+    "name": "櫛田神社",
+    "description": "博多の総鎮守として親しまれている神社。博多祇園山笠の飾り山笠が一年中展示されています。",
+    "category": "sightseeing",
+    "location": {
+      "lat": 33.5930,
+      "lng": 130.4106
+    },
+    "estimatedDuration": 45,
+    "openingHours": "4:00-22:00",
+    "price": 0
+  },
+  {
+    "id": "spot_8",
+    "name": "中洲屋台街",
+    "description": "博多の夜の名物。ラーメン、おでん、焼き鳥など様々な屋台が軒を連ねます。",
+    "category": "food",
+    "location": {
+      "lat": 33.5925,
+      "lng": 130.4080
+    },
+    "estimatedDuration": 90,
+    "openingHours": "18:00-26:00",
+    "price": 2000
+  },
+  {
+    "id": "spot_9",
+    "name": "福岡市博物館",
+    "description": "国宝「金印」を常設展示している博物館。福岡の歴史と文化を学べます。",
+    "category": "sightseeing",
+    "location": {
+      "lat": 33.5900,
+      "lng": 130.3540
+    },
+    "estimatedDuration": 90,
+    "openingHours": "9:30-17:30",
+    "price": 200
+  },
+  {
+    "id": "spot_10",
+    "name": "ももち浜海浜公園",
+    "description": "福岡タワーの北側に広がる人工海浜公園。都会にいながらビーチリゾート気分を味わえます。",
+    "category": "activity",
+    "location": {
+      "lat": 33.5945,
+      "lng": 130.3520
+    },
+    "estimatedDuration": 60,
+    "openingHours": "24時間",
+    "price": 0
+  },
+  {
+    "id": "spot_11",
+    "name": "天神地下街",
+    "description": "19世紀ヨーロッパをイメージした地下街。ファッション、グルメ、雑貨などのお店が並びます。",
+    "category": "activity",
+    "location": {
+      "lat": 33.5900,
+      "lng": 130.3990
+    },
+    "estimatedDuration": 60,
+    "openingHours": "10:00-20:00",
+    "price": 0
+  },
+  {
+    "id": "spot_12",
+    "name": "舞鶴公園",
+    "description": "福岡城跡にある公園。春には桜の名所として多くの人で賑わいます。",
+    "category": "sightseeing",
+    "location": {
+      "lat": 33.5870,
+      "lng": 130.3830
+    },
+    "estimatedDuration": 60,
+    "openingHours": "24時間",
+    "price": 0
+  },
+  {
+    "id": "spot_13",
+    "name": "博多座",
+    "description": "歌舞伎、ミュージカル、演劇など様々な舞台芸術が上演される劇場。",
+    "category": "activity",
+    "location": {
+      "lat": 33.5950,
+      "lng": 130.4050
+    },
+    "estimatedDuration": 180,
+    "openingHours": "公演による",
+    "price": 5000
+  },
+  {
+    "id": "spot_14",
+    "name": "アクロス福岡",
+    "description": "階段状の屋上庭園「ステップガーデン」が特徴的な複合施設。",
+    "category": "sightseeing",
+    "location": {
+      "lat": 33.5910,
+      "lng": 130.4020
+    },
+    "estimatedDuration": 45,
+    "openingHours": "10:00-18:00",
+    "price": 0
+  },
+  {
+    "id": "spot_15",
+    "name": "柳橋連合市場",
+    "description": "「博多の台所」と呼ばれる市場。新鮮な魚介類や明太子などを購入できます。",
+    "category": "food",
+    "location": {
+      "lat": 33.5850,
+      "lng": 130.4050
+    },
+    "estimatedDuration": 45,
+    "openingHours": "8:00-18:00",
+    "price": 0
+  },
+  {
+    "id": "spot_16",
+    "name": "住吉神社",
+    "description": "全国に2000社以上ある住吉神社の始祖とされる神社。航海安全の神様。",
+    "category": "sightseeing",
+    "location": {
+      "lat": 33.5855,
+      "lng": 130.4130
+    },
+    "estimatedDuration": 45,
+    "openingHours": "6:00-17:00",
+    "price": 0
+  },
+  {
+    "id": "spot_17",
+    "name": "東長寺",
+    "description": "空海（弘法大師）が日本で最初に開いたお寺。日本最大級の木造大仏「福岡大仏」があります。",
+    "category": "sightseeing",
+    "location": {
+      "lat": 33.5955,
+      "lng": 130.4140
+    },
+    "estimatedDuration": 45,
+    "openingHours": "9:00-17:00",
+    "price": 0
+  },
+  {
+    "id": "spot_18",
+    "name": "博多ポートタワー",
+    "description": "博多港のシンボル。展望室からは博多港や市街地を一望できます。入場無料。",
+    "category": "sightseeing",
+    "location": {
+      "lat": 33.6030,
+      "lng": 130.3960
+    },
+    "estimatedDuration": 45,
+    "openingHours": "10:00-22:00",
+    "price": 0
+  },
+  {
+    "id": "spot_19",
+    "name": "ベイサイドプレイス博多",
+    "description": "博多港埠頭旅客ターミナルに隣接する複合商業施設。巨大水槽があります。",
+    "category": "activity",
+    "location": {
+      "lat": 33.6020,
+      "lng": 130.3970
+    },
+    "estimatedDuration": 60,
+    "openingHours": "10:00-20:00",
+    "price": 0
+  },
+  {
+    "id": "spot_20",
+    "name": "元祖博多めんたい重",
+    "description": "日本初の明太子料理専門店。特製のタレに漬け込んだ昆布巻き明太子を乗せた「めんたい重」が名物。",
+    "category": "food",
+    "location": {
+      "lat": 33.5915,
+      "lng": 130.4030
+    },
+    "estimatedDuration": 60,
+    "openingHours": "7:00-22:30",
+    "price": 2000
+  }
+]
