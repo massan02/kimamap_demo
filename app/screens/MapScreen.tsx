@@ -5,7 +5,6 @@ import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MapStackParamList } from '../navigation/types';
 
 export default function MapScreen() {
   const navigation = useNavigation();
