@@ -105,18 +105,8 @@ export default function SearchScreen() {
           {
             text: 'OK',
             onPress: () => {
-              // Navigate to MapScreen with plan data
-              navigation.reset({
-                index: 0,
-                routes: [
-                  {
-                    name: 'MapScreen',
-                    params: {
-                      plan: response.plan,
-                    },
-                  },
-                ],
-              });
+              // Navigate to SearchResultScreen with plan data
+              navigation.navigate('SearchResult', { plan: response.plan });
             }
           }
         ]

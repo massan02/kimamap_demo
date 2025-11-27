@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Alert, TouchableOpacity, Text } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Region, Polyline } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MapStackParamList } from '../navigation/types';
 
 export default function MapScreen() {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<MapStackParamList, 'MapScreen'>>();
-  const { plan } = route.params || {};
   const insets = useSafeAreaInsets();
 
   const [region, setRegion] = useState<Region | null>(null);
@@ -28,34 +26,14 @@ export default function MapScreen() {
       let location = await Location.getCurrentPositionAsync({});
       setCurrentLocation(location);
       
-      if (!plan) {
-        setRegion({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        });
-      }
+      setRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
     })();
   }, []);
-
-  // プランが渡されたら、ルート全体が見えるようにズーム
-  useEffect(() => {
-    if (plan && mapRef.current) {
-      const coordinates = plan.spots.map(spot => ({
-        latitude: spot.location.lat,
-        longitude: spot.location.lng,
-      }));
-      
-      // 少し遅延させないと地図の準備が間に合わない場合がある
-      setTimeout(() => {
-        mapRef.current?.fitToCoordinates(coordinates, {
-          edgePadding: { top: 100, right: 50, bottom: 100, left: 50 },
-          animated: true,
-        });
-      }, 500);
-    }
-  }, [plan]);
 
   const handleCenterLocation = () => {
     if (currentLocation && mapRef.current) {
@@ -98,16 +76,6 @@ export default function MapScreen() {
         }}
         showsUserLocation={true}
       >
-        {plan && (
-          <Polyline
-            coordinates={plan.spots.map(spot => ({
-              latitude: spot.location.lat,
-              longitude: spot.location.lng,
-            }))}
-            strokeColor="#007AFF"
-            strokeWidth={4}
-          />
-        )}
       </MapView>
       
       <TouchableOpacity 

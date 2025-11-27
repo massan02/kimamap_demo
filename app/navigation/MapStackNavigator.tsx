@@ -2,6 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapScreen from '../screens/MapScreen';
 import SearchScreen from '../screens/SearchScreen';
+import SearchResultScreen from '../screens/SearchResultScreen';
 import { MapStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<MapStackParamList>();
@@ -15,6 +16,7 @@ export default function MapStackNavigator() {
         component={SearchScreen} 
         options={{ presentation: 'modal' }}
       />
+      <Stack.Screen name="SearchResult" component={SearchResultScreen} />
     </Stack.Navigator>
   );
 }
