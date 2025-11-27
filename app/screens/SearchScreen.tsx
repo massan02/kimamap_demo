@@ -12,12 +12,17 @@ import {
   Alert,
   ActivityIndicator
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CompositeNavigationProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as ExpoLocation from 'expo-location';
 import { useEffect } from 'react';
 import { createPlan } from '../services/api';
+import { MainTabParamList, MapStackParamList } from '../navigation/types';
+
+type SearchScreenNavigationProp = NativeStackNavigationProp<MapStackParamList, 'Search'>;
 
 type Transportation = 'walk' | 'bicycle' | 'car';
 
@@ -37,7 +42,7 @@ const DURATION_PRESETS = [
 ];
 
 export default function SearchScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<SearchScreenNavigationProp>();
   
   // Form State
   const [query, setQuery] = useState('');
@@ -95,11 +100,22 @@ export default function SearchScreen() {
       
       Alert.alert(
         '成功', 
-        `プランを取得しました！\nタイトル: ${response.plan.title}\nスポット数: ${response.plan.spots.length}件\n総所要時間: ${response.plan.totalDuration}分`
+        'プランを取得しました！地図画面へ移動します。',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              // Close the modal first
+              navigation.goBack();
+              
+              // Then navigate to the result screen.
+              // Since code execution continues after goBack, this will queue the navigation
+              // to happen immediately after the modal dismissal starts.
+              navigation.navigate('SearchResult', { plan: response.plan });
+            }
+          }
+        ]
       );
-      
-      // TODO: Navigate to MapScreen with plan data
-      // navigation.navigate('Map', { plan: response.plan });
       
     } catch (error) {
       console.error('Error creating plan:', error);

@@ -4,9 +4,12 @@ import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function MapScreen() {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
+
   const [region, setRegion] = useState<Region | null>(null);
   const [currentLocation, setCurrentLocation] = useState<Location.LocationObject | null>(null);
   const mapRef = useRef<MapView>(null);
@@ -21,6 +24,7 @@ export default function MapScreen() {
 
       let location = await Location.getCurrentPositionAsync({});
       setCurrentLocation(location);
+      
       setRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
@@ -70,10 +74,11 @@ export default function MapScreen() {
           longitudeDelta: 0.01,
         }}
         showsUserLocation={true}
-      />
+      >
+      </MapView>
       
       <TouchableOpacity 
-        style={styles.searchContainer} 
+        style={[styles.searchContainer, { top: insets.top + 16 }]} 
         activeOpacity={0.9}
         onPress={() => {
           // @ts-ignore - Navigation type definition is pending
