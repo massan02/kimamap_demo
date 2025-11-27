@@ -20,12 +20,9 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ExpoLocation from 'expo-location';
 import { useEffect } from 'react';
 import { createPlan } from '../services/api';
-import { RootStackParamList, MainTabParamList } from '../navigation/types';
+import { MainTabParamList, MapStackParamList } from '../navigation/types';
 
-type SearchScreenNavigationProp = CompositeNavigationProp<
-  NativeStackNavigationProp<RootStackParamList, 'Search'>,
-  BottomTabNavigationProp<MainTabParamList>
->;
+type SearchScreenNavigationProp = NativeStackNavigationProp<MapStackParamList, 'Search'>;
 
 type Transportation = 'walk' | 'bicycle' | 'car';
 
@@ -109,17 +106,15 @@ export default function SearchScreen() {
             text: 'OK',
             onPress: () => {
               // Navigate to MapScreen with plan data
-              // navigation.navigateで戻るとスタックが積み重なる場合があるため、resetを使用
               navigation.reset({
                 index: 0,
                 routes: [
                   {
-                    name: 'Main',
+                    name: 'MapScreen',
                     params: {
-                      screen: 'Map',
-                      params: { plan: response.plan }
-                    }
-                  }
+                      plan: response.plan,
+                    },
+                  },
                 ],
               });
             }

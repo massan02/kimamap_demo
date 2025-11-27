@@ -4,12 +4,14 @@ import MapView, { PROVIDER_GOOGLE, Region, Polyline } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { MainTabParamList } from '../navigation/types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { MapStackParamList } from '../navigation/types';
 
 export default function MapScreen() {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<MainTabParamList, 'Map'>>();
+  const route = useRoute<RouteProp<MapStackParamList, 'MapScreen'>>();
   const { plan } = route.params || {};
+  const insets = useSafeAreaInsets();
 
   const [region, setRegion] = useState<Region | null>(null);
   const [currentLocation, setCurrentLocation] = useState<Location.LocationObject | null>(null);
@@ -109,7 +111,7 @@ export default function MapScreen() {
       </MapView>
       
       <TouchableOpacity 
-        style={styles.searchContainer} 
+        style={[styles.searchContainer, { top: insets.top + 16 }]} 
         activeOpacity={0.9}
         onPress={() => {
           // @ts-ignore - Navigation type definition is pending
