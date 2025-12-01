@@ -42,7 +42,7 @@ npx create-expo-app@latest . --template blank-typescript
   - Map タブ
   - 保存済み タブ（※現在は SavedScreen 削除済み、Profile と Map のみ）
   - マイページ タブ
-- [ ] Stack Navigator 実装（検索画面など）
+- [x] Stack Navigator 実装（検索画面など）
 - [x] ダミー画面作成（各タブ用）
 
 **理由**: アプリの骨格

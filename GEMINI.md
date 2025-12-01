@@ -27,7 +27,7 @@
 ### インフラ・データ
 *   **Database/Auth:** Supabase (PostgreSQL, Google OAuth)
 
-## 3. 開発環境と実行コマンド
+### 開発環境と実行コマンド
 
 ### フロントエンド (`/`)
 ルートディレクトリで実行します。
@@ -39,6 +39,12 @@
     *   `npm run web`: ブラウザで起動
 *   **キャッシュクリア起動:** `npx expo start -c` (ビルドエラー時などに有効)
 *   **型チェック:** `npx tsc --noEmit`
+
+**実機でのデバッグ (ngrok使用)**
+実機からローカルサーバーに接続するために `ngrok` を使用します。
+1.  `ngrok http 3000` を別ターミナルで実行し、Forwarding URL (例: `https://xxxx.ngrok-free.app`) を取得。
+2.  ルート直下の `.env` ファイルに `EXPO_PUBLIC_API_URL=<URL>/api` を設定。
+3.  `npx expo start -c` でアプリを起動。
 
 ### バックエンド (`/server`)
 `server` ディレクトリ内で実行します。
@@ -88,17 +94,20 @@ kimamap_demo/
 
 ## 6. 現在のステータスと優先事項
 
-**完了済み (Phase 1 & 2):**
+**完了済み (Phase 1, 2 & 3):**
 *   [x] ナビゲーション実装 (Tab, Stack)
 *   [x] Google Maps 表示、現在地取得
-*   [x] Supabase 接続設定
+*   [x] Supabase 接続設定・認証機能 (Login, AuthContext)
 *   [x] バックエンド初期構築 (Express)
+*   [x] 検索画面 UI (SearchScreen)
+*   [x] プラン作成ロジック (Gemini + Google Maps Grounding)
+*   [x] 検索結果表示・ルート描画 (SearchResultScreen)
 
-**進行中・次期作業 (Phase 3):**
-*   [ ] ログイン画面の実装
-*   [ ] AuthContext の実装と認証フローの確立
-*   [ ] 検索画面 (SearchScreen) のUI実装
-*   [ ] プラン作成ロジックの実装
+**進行中・次期作業 (Phase 4 - データ永続化):**
+*   [ ] Supabase テーブル設計 (plans テーブル)
+*   [ ] 履歴保存機能の実装 (API & Client)
+*   [ ] 保存済みプラン一覧画面の実装
+*   [ ] お気に入り機能の実装
 
 ## 7. AI アシスタントへの指示
 *   コードを変更する際は、既存のスタイルとプロジェクト構造を尊重してください。
