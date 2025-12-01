@@ -94,17 +94,20 @@ kimamap_demo/
 
 ## 6. 現在のステータスと優先事項
 
-**完了済み (Phase 1 & 2):**
+**完了済み (Phase 1, 2 & 3):**
 *   [x] ナビゲーション実装 (Tab, Stack)
 *   [x] Google Maps 表示、現在地取得
-*   [x] Supabase 接続設定
+*   [x] Supabase 接続設定・認証機能 (Login, AuthContext)
 *   [x] バックエンド初期構築 (Express)
+*   [x] 検索画面 UI (SearchScreen)
+*   [x] プラン作成ロジック (Gemini + Google Maps Grounding)
+*   [x] 検索結果表示・ルート描画 (SearchResultScreen)
 
-**進行中・次期作業 (Phase 3):**
-*   [ ] ログイン画面の実装
-*   [ ] AuthContext の実装と認証フローの確立
-*   [ ] 検索画面 (SearchScreen) のUI実装
-*   [ ] プラン作成ロジックの実装
+**進行中・次期作業 (Phase 4 - データ永続化):**
+*   [ ] Supabase テーブル設計 (plans テーブル)
+*   [ ] 履歴保存機能の実装 (API & Client)
+*   [ ] 保存済みプラン一覧画面の実装
+*   [ ] お気に入り機能の実装
 
 ## 7. AI アシスタントへの指示
 *   コードを変更する際は、既存のスタイルとプロジェクト構造を尊重してください。
