@@ -48,6 +48,8 @@ export default function SearchResultScreen() {
           latitudeDelta: 0.05,
           longitudeDelta: 0.05,
         }}
+        showsUserLocation={true}
+        showsMyLocationButton={true}
       >
         <Polyline
           coordinates={plan.spots.map(spot => ({
