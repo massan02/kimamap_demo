@@ -59,7 +59,7 @@ export default function SearchResultScreen() {
         />
         {plan.spots.map((spot, index) => (
           <Marker
-            key={spot.id}
+            key={index}
             coordinate={{
               latitude: spot.location.lat,
               longitude: spot.location.lng,
@@ -94,11 +94,11 @@ export default function SearchResultScreen() {
         
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.spotsScroll}>
           {plan.spots.map((spot, index) => (
-            <View key={spot.id} style={styles.spotCard}>
+            <View key={index} style={styles.spotCard}>
               <Text style={styles.spotOrder}>{index + 1}</Text>
               <View>
                 <Text style={styles.spotName} numberOfLines={1}>{spot.name}</Text>
-                <Text style={styles.spotCategory}>{spot.category}</Text>
+                <Text style={styles.spotCategory}>滞在: {spot.stayDuration}分</Text>
               </View>
             </View>
           ))}

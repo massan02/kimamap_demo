@@ -19,14 +19,11 @@ export interface PlanRequest {
 }
 
 export interface Spot {
-  id: string;
   name: string;
   description: string;
-  category: 'sightseeing' | 'food' | 'activity';
   location: Location;
-  estimatedDuration: number;
-  openingHours?: string;
-  price?: number;
+  stayDuration: number;
+  address?: string;
 }
 
 export interface Plan {
