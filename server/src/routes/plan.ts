@@ -1,12 +1,21 @@
-import { Router } from 'express';
-import { z } from 'zod';
+import { Router } from "express";
+import { z } from "zod";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config();
 
 const router = Router();
+
+// Initialize Gemini API
+// Note: In a real app, ensure GEMINI_API_KEY is set in server/.env
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 // Validation Schema
 const PlanRequestSchema = z.object({
   query: z.string().min(1, "Query is required"),
-  transportation: z.enum(['walk', 'bicycle', 'car']),
+  transportation: z.enum(["walk", "bicycle", "car"]),
   duration: z.number().min(30, "Duration must be at least 30 minutes"),
   returnToStart: z.boolean(),
   startingLocation: z.object({
@@ -15,29 +24,114 @@ const PlanRequestSchema = z.object({
   }),
 });
 
-import spotsData from '../data/spots.json';
+// Expected JSON output format (used in prompt, not as responseSchema)
+// Note: Google Maps grounding doesn't support JSON mode (responseMimeType: "application/json")
+// So we instruct the model via prompt to return JSON format
+const expectedJsonFormat = `
+{
+  "title": "string - A creative title for the plan",
+  "spots": [
+    {
+      "name": "string - Name of the place",
+      "description": "string - Brief description and why it matches the user's interest",
+      "stayDuration": "number - Recommended stay duration in minutes",
+      "location": {
+        "lat": "number - Latitude",
+        "lng": "number - Longitude"
+      },
+      "address": "string - Full address of the place"
+    }
+  ],
+  "totalDuration": "number - Total estimated duration in minutes including travel time"
+}
+`;
 
 // POST /api/plan
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     // Validate Request
     const validatedData = PlanRequestSchema.parse(req.body);
-    
-    console.log('Received Plan Request:', validatedData);
+    const { query, transportation, duration, returnToStart, startingLocation } = validatedData;
 
-    // TODO: Implement AI Logic (Phase 3-4)
-    // For now, return the mock data
-    
-    res.status(200).json({
-      message: "Plan request received",
-      request: validatedData,
-      plan: {
-        title: "福岡観光プラン (Mock)",
-        spots: spotsData,
-        totalDuration: spotsData.reduce((acc, spot) => acc + spot.estimatedDuration, 0),
-      }
+    console.log("Received Plan Request:", validatedData);
+
+    if (!process.env.GEMINI_API_KEY) {
+      console.error("GEMINI_API_KEY is not set.");
+      return res
+        .status(500)
+        .json({ error: "Server Configuration Error: API Key missing" });
+    }
+
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash", // Using 2.5 flash for Google Maps grounding support
+      tools: [
+        {
+          googleMaps: {},
+        } as any,
+      ],
     });
 
+    // Construct Prompt
+    const prompt = `
+You are a travel guide AI for Fukuoka, Japan.
+Create a travel plan based on the user's request using real places from Google Maps.
+
+User Request:
+- Query (Mood/Interest): "${query}"
+- Transportation: ${transportation}
+- Available Time: ${duration} minutes
+- Return to Start: ${returnToStart}
+- Starting Location: latitude ${startingLocation.lat}, longitude ${startingLocation.lng}
+
+Instructions:
+1. Use Google Maps to find real places in Fukuoka that match the user's query/mood/interest.
+2. Select appropriate spots considering the available time and transportation method.
+3. Order them logically to create an efficient route starting near the "Starting Location".
+4. Consider travel time between spots (approximate speeds: Walk=80m/min, Bike=250m/min, Car=400m/min).
+5. Ensure the total duration (stay time + travel time) does not exceed "Available Time".
+6. For each spot, provide the name, description, recommended stay duration, location coordinates, and address.
+7. If returning to start is required, factor in the return travel time.
+
+IMPORTANT: Return ONLY a valid JSON object (no markdown, no code blocks, no explanation).
+The JSON must follow this exact format:
+${expectedJsonFormat}
+`;
+
+    console.log("Calling Gemini API...");
+    // Call API
+    const result = await model.generateContent(prompt);
+    const responseText = result.response.text();
+
+    console.log("Gemini Response:", responseText);
+
+    // Clean up response text (remove markdown code blocks if present)
+    let cleanedResponse = responseText.trim();
+    if (cleanedResponse.startsWith("```json")) {
+      cleanedResponse = cleanedResponse.slice(7);
+    } else if (cleanedResponse.startsWith("```")) {
+      cleanedResponse = cleanedResponse.slice(3);
+    }
+    if (cleanedResponse.endsWith("```")) {
+      cleanedResponse = cleanedResponse.slice(0, -3);
+    }
+    cleanedResponse = cleanedResponse.trim();
+
+    const aiResponse = JSON.parse(cleanedResponse);
+
+    // With Google Maps grounding, the spots come directly from Google Maps data
+    // No need to merge with local data as the AI uses real places
+    res.status(200).json({
+      message: "Plan created by AI with Google Maps grounding",
+      request: validatedData,
+      plan: {
+        title: aiResponse.title,
+        spots: aiResponse.spots,
+        totalDuration: aiResponse.totalDuration,
+      },
+      // Include grounding metadata if available
+      groundingMetadata:
+        result.response.candidates?.[0]?.groundingMetadata || null,
+    });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({
@@ -45,9 +139,12 @@ router.post('/', async (req, res) => {
         details: error.issues,
       });
     }
-    
-    console.error('Server Error:', error);
-    res.status(500).json({ error: "Internal Server Error" });
+
+    console.error("Server Error:", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+      details: error instanceof Error ? error.message : String(error),
+    });
   }
 });
 
