@@ -1,8 +1,8 @@
 // API Service for Kimamap
 
-const API_BASE_URL = __DEV__ 
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || (__DEV__ 
   ? 'http://localhost:3000/api' 
-  : 'https://your-production-api.com/api';
+  : 'https://your-production-api.com/api');
 
 // Types
 export interface Location {

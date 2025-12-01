@@ -27,7 +27,7 @@
 ### インフラ・データ
 *   **Database/Auth:** Supabase (PostgreSQL, Google OAuth)
 
-## 3. 開発環境と実行コマンド
+### 開発環境と実行コマンド
 
 ### フロントエンド (`/`)
 ルートディレクトリで実行します。
@@ -39,6 +39,12 @@
     *   `npm run web`: ブラウザで起動
 *   **キャッシュクリア起動:** `npx expo start -c` (ビルドエラー時などに有効)
 *   **型チェック:** `npx tsc --noEmit`
+
+**実機でのデバッグ (ngrok使用)**
+実機からローカルサーバーに接続するために `ngrok` を使用します。
+1.  `ngrok http 3000` を別ターミナルで実行し、Forwarding URL (例: `https://xxxx.ngrok-free.app`) を取得。
+2.  ルート直下の `.env` ファイルに `EXPO_PUBLIC_API_URL=<URL>/api` を設定。
+3.  `npx expo start -c` でアプリを起動。
 
 ### バックエンド (`/server`)
 `server` ディレクトリ内で実行します。
