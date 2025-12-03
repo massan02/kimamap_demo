@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 
 // Load environment variables
@@ -8,9 +8,9 @@ dotenv.config();
 
 const router = Router();
 
-// Initialize Gemini API
+// Initialize Google Gen AI SDK
 // Note: In a real app, ensure GEMINI_API_KEY is set in server/.env
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
 // Validation Schema
 const PlanRequestSchema = z.object({
@@ -62,15 +62,6 @@ router.post("/", async (req, res) => {
         .json({ error: "Server Configuration Error: API Key missing" });
     }
 
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash", // Using 2.5 flash for Google Maps grounding support
-      tools: [
-        {
-          googleMaps: {},
-        } as any,
-      ],
-    });
-
     // Construct Prompt
     const prompt = `
 You are a travel guide AI for Fukuoka, Japan.
@@ -98,11 +89,33 @@ ${expectedJsonFormat}
 `;
 
     console.log("Calling Gemini API...");
-    // Call API
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
+    
+    // Call API with new SDK
+    const result = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [
+        {
+          parts: [
+            {
+              text: prompt,
+            },
+          ],
+        },
+      ],
+      config: {
+        tools: [
+          // @ts-ignore: googleMaps is supported but might not be in types yet or requires specific config
+          { googleMaps: {} }
+        ],
+      },
+    });
 
+    const responseText = result.text;
     console.log("Gemini Response:", responseText);
+
+    if (!responseText) {
+       throw new Error("Empty response from AI");
+    }
 
     // Clean up response text (remove markdown code blocks if present)
     let cleanedResponse = responseText.trim();
@@ -118,8 +131,6 @@ ${expectedJsonFormat}
 
     const aiResponse = JSON.parse(cleanedResponse);
 
-    // With Google Maps grounding, the spots come directly from Google Maps data
-    // No need to merge with local data as the AI uses real places
     res.status(200).json({
       message: "Plan created by AI with Google Maps grounding",
       request: validatedData,
@@ -128,9 +139,8 @@ ${expectedJsonFormat}
         spots: aiResponse.spots,
         totalDuration: aiResponse.totalDuration,
       },
-      // Include grounding metadata if available
-      groundingMetadata:
-        result.response.candidates?.[0]?.groundingMetadata || null,
+      // Accessing grounding metadata from candidates
+      groundingMetadata: result.candidates?.[0]?.groundingMetadata || null,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
