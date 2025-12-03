@@ -1,19 +1,41 @@
 import React from 'react';
-// 1. タブナビゲーターを作る関数をインポート
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// 2. さっき作った画面をインポート
+import { Ionicons } from '@expo/vector-icons';
 import MapStackNavigator from './MapStackNavigator';
 import ProfileScreen from '../screens/ProfileScreen';
-// 3. タブナビゲーターの実体を作成
+
 const Tab = createBottomTabNavigator();
+
 export default function MainTabNavigator() {
   return (
-    // 4. Tab.Navigator で全体を囲む
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
-      {/* 5. Tab.Screen で各画面を登録する */}
-      {/* name: 内部で使う名前, component: 表示する画面 */}
-      <Tab.Screen name="Map" component={MapStackNavigator} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName: keyof typeof Ionicons.glyphMap;
+
+          if (route.name === 'Map') {
+            iconName = focused ? 'map' : 'map-outline';
+          } else if (route.name === 'Profile') {
+            iconName = focused ? 'person' : 'person-outline';
+          } else {
+            iconName = 'help-outline';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+    >
+      <Tab.Screen 
+        name="Map" 
+        component={MapStackNavigator} 
+        options={{ tabBarLabel: 'マップ' }}
+      />
+      <Tab.Screen 
+        name="Profile" 
+        component={ProfileScreen} 
+        options={{ tabBarLabel: 'マイページ' }}
+      />
     </Tab.Navigator>
   );
 }
