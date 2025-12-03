@@ -53,6 +53,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         options: {
           redirectTo: redirectUrl,
           skipBrowserRedirect: true,
+          queryParams: {
+            prompt: 'select_account',
+          },
         },
       });
 
