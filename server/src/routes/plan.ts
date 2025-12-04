@@ -74,16 +74,17 @@ User Request:
 - Return to Start: ${returnToStart}
 - Starting Location: latitude ${startingLocation.lat}, longitude ${startingLocation.lng}
 
-Instructions:
-1. Use Google Maps to find real places in Fukuoka that match the user's query/mood/interest.
-2. Select appropriate spots considering the available time and transportation method.
-3. Order them logically to create an efficient route starting near the "Starting Location".
-4. Consider travel time between spots (approximate speeds: Walk=80m/min, Bike=250m/min, Car=400m/min).
-5. Ensure the total duration (stay time + travel time) does not exceed "Available Time".
-6. For each spot, provide the name, description, recommended stay duration, location coordinates, and address.
-7. If returning to start is required, factor in the return travel time.
+**CRITICAL INSTRUCTIONS for Google Maps Tool Usage:**
+1.  **Search**: Find real places in Fukuoka that match the user's query.
+2.  **Route Calculation**: You MUST use the Google Maps Routing capabilities to calculate the *exact* travel time and route distance between each spot.
+    *   **DO NOT estimate travel times** based on straight-line distance or average speeds.
+    *   **DO NOT assume** constant speeds (e.g., "80m/min"). Use actual road network data.
+    *   Take into account the specified transportation mode: ${transportation}.
+3.  **Optimization**: Order the spots to create a logical, efficient route that fits within the "Available Time".
+4.  **Verification**: If the calculated total duration (stay time + *actual* travel time) exceeds the limit, reduce the number of spots.
 
-IMPORTANT: Return ONLY a valid JSON object (no markdown, no code blocks, no explanation).
+**Output Format:**
+Return ONLY a valid JSON object.
 The JSON must follow this exact format:
 ${expectedJsonFormat}
 `;
@@ -129,7 +130,18 @@ ${expectedJsonFormat}
     }
     cleanedResponse = cleanedResponse.trim();
 
-    const aiResponse = JSON.parse(cleanedResponse);
+    let aiResponse;
+    try {
+      aiResponse = JSON.parse(cleanedResponse);
+    } catch (parseError) {
+      console.error("JSON Parse Error:", parseError);
+      console.error("Raw AI Response:", responseText); // Log the raw text for debugging
+      return res.status(422).json({
+        error: "AI Response Error",
+        message: "The AI failed to generate a valid plan. Please try again.",
+        details: "Invalid JSON format received from AI.",
+      });
+    }
 
     res.status(200).json({
       message: "Plan created by AI with Google Maps grounding",
