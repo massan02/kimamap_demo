@@ -75,12 +75,14 @@ User Request:
 - Starting Location: latitude ${startingLocation.lat}, longitude ${startingLocation.lng}
 
 **CRITICAL INSTRUCTIONS for Google Maps Tool Usage:**
-1.  **Search**: Find real places in Fukuoka that match the user's query.
+1.  **Search**: Find real places in Fukuoka that match the user's query **AND are located reasonably close to the "Starting Location"**.
 2.  **Route Calculation**: You MUST use the Google Maps Routing capabilities to calculate the *exact* travel time and route distance between each spot.
+    *   **Calculate the route STARTING FROM the "Starting Location"** to the first spot.
+    *   Include this initial travel time in the total duration.
     *   **DO NOT estimate travel times** based on straight-line distance or average speeds.
     *   **DO NOT assume** constant speeds (e.g., "80m/min"). Use actual road network data.
     *   Take into account the specified transportation mode: ${transportation}.
-3.  **Optimization**: Order the spots to create a logical, efficient route that fits within the "Available Time".
+3.  **Optimization**: Order the spots to create a logical, efficient route **starting from the "Starting Location"** that fits within the "Available Time".
 4.  **Verification**: If the calculated total duration (stay time + *actual* travel time) exceeds the limit, reduce the number of spots.
 
 **Output Format:**
