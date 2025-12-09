@@ -111,7 +111,7 @@ export default function SearchScreen() {
               // Then navigate to the result screen.
               // Since code execution continues after goBack, this will queue the navigation
               // to happen immediately after the modal dismissal starts.
-              navigation.navigate('SearchResult', { plan: response.plan });
+              navigation.navigate('SearchResult', { plan: response.plan, transportation });
             }
           }
         ]
