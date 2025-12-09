@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Linking, Alert } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Polyline, Marker } from 'react-native-maps';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -9,9 +9,19 @@ import { MapStackParamList } from '../navigation/types';
 export default function SearchResultScreen() {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<MapStackParamList, 'SearchResult'>>();
-  const { plan } = route.params;
+  const { plan, transportation } = route.params;
   const insets = useSafeAreaInsets();
   const mapRef = useRef<MapView>(null);
+
+  // アプリ内の移動手段をGoogle Maps APIの形式にマッピング
+  const getTravelMode = (mode: 'walk' | 'bicycle' | 'car'): string => {
+    const modeMap = {
+      walk: 'walking',
+      bicycle: 'bicycling',
+      car: 'driving',
+    };
+    return modeMap[mode];
+  };
 
   // 初回レンダリング時にルート全体を表示
   useEffect(() => {
@@ -35,6 +45,30 @@ export default function SearchResultScreen() {
       }, 500);
     }
   }, [plan]);
+
+  // Google Mapsアプリでルートを開く
+  const openGoogleMaps = () => {
+    const spots = plan.spots;
+    if (spots.length === 0) return;
+
+    const origin = `${spots[0].location.lat},${spots[0].location.lng}`;
+    const destination = `${spots[spots.length - 1].location.lat},${spots[spots.length - 1].location.lng}`;
+    
+    // 中間の経由地点
+    const waypoints = spots.length > 2
+      ? spots.slice(1, -1).map(s => `${s.location.lat},${s.location.lng}`).join('|')
+      : '';
+
+    const travelMode = getTravelMode(transportation);
+    let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=${travelMode}`;
+    if (waypoints) {
+      url += `&waypoints=${waypoints}`;
+    }
+
+    Linking.openURL(url).catch(() => {
+      Alert.alert('エラー', 'Google Mapsを開けませんでした');
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -106,7 +140,7 @@ export default function SearchResultScreen() {
           ))}
         </ScrollView>
         
-        <TouchableOpacity style={styles.startButton}>
+        <TouchableOpacity style={styles.startButton} onPress={openGoogleMaps}>
           <Text style={styles.startButtonText}>案内を開始</Text>
           <MaterialIcons name="navigation" size={20} color="#fff" style={{ marginLeft: 8 }} />
         </TouchableOpacity>
