@@ -1,15 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Linking, Alert } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Polyline, Marker } from 'react-native-maps';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { MapStackParamList } from '../navigation/types';
+import polyline from '@mapbox/polyline';
 
 export default function SearchResultScreen() {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<MapStackParamList, 'SearchResult'>>();
-  const { plan, transportation } = route.params;
+  const { plan, transportation, startingLocation, routeResult } = route.params;
   const insets = useSafeAreaInsets();
   const mapRef = useRef<MapView>(null);
 
@@ -23,17 +24,48 @@ export default function SearchResultScreen() {
     return modeMap[mode];
   };
 
+  // overviewPolylineをデコードして座標配列に変換
+  const decodedPolyline = useMemo(() => {
+    if (routeResult?.overviewPolyline) {
+      try {
+        const decoded = polyline.decode(routeResult.overviewPolyline);
+        return decoded.map(([lat, lng]: [number, number]) => ({
+          latitude: lat,
+          longitude: lng,
+        }));
+      } catch (e) {
+        console.warn('Failed to decode polyline:', e);
+        return null;
+      }
+    }
+    return null;
+  }, [routeResult]);
+
+  // フォールバック: スポット間の直線
+  const fallbackCoordinates = useMemo(() => {
+    const coords = plan.spots.map(spot => ({
+      latitude: spot.location.lat,
+      longitude: spot.location.lng,
+    }));
+    // 開始地点を先頭に追加
+    if (startingLocation) {
+      coords.unshift({
+        latitude: startingLocation.lat,
+        longitude: startingLocation.lng,
+      });
+    }
+    return coords;
+  }, [plan, startingLocation]);
+
   // 初回レンダリング時にルート全体を表示
   useEffect(() => {
     if (plan && mapRef.current) {
-      const coordinates = plan.spots.map(spot => ({
-        latitude: spot.location.lat,
-        longitude: spot.location.lng,
-      }));
+      // ポリラインの座標またはフォールバック座標を使用
+      const coordinatesToFit = decodedPolyline || fallbackCoordinates;
       
       // マップの準備時間を考慮して少し遅延
       setTimeout(() => {
-        mapRef.current?.fitToCoordinates(coordinates, {
+        mapRef.current?.fitToCoordinates(coordinatesToFit, {
           edgePadding: { 
             top: 100, 
             right: 50, 
@@ -44,19 +76,20 @@ export default function SearchResultScreen() {
         });
       }, 500);
     }
-  }, [plan]);
+  }, [plan, decodedPolyline, fallbackCoordinates]);
 
   // Google Mapsアプリでルートを開く
   const openGoogleMaps = () => {
     const spots = plan.spots;
     if (spots.length === 0) return;
 
-    const origin = `${spots[0].location.lat},${spots[0].location.lng}`;
+    // 出発地: ユーザーの現在地（startingLocation）を使用
+    const origin = `${startingLocation.lat},${startingLocation.lng}`;
     const destination = `${spots[spots.length - 1].location.lat},${spots[spots.length - 1].location.lng}`;
     
-    // 中間の経由地点
-    const waypoints = spots.length > 2
-      ? spots.slice(1, -1).map(s => `${s.location.lat},${s.location.lng}`).join('|')
+    // 経由地点: 最初のスポットから最後の1つ前まで全てを含める
+    const waypoints = spots.length > 1
+      ? spots.slice(0, -1).map(s => `${s.location.lat},${s.location.lng}`).join('|')
       : '';
 
     const travelMode = getTravelMode(transportation);
@@ -86,10 +119,7 @@ export default function SearchResultScreen() {
         showsMyLocationButton={true}
       >
         <Polyline
-          coordinates={plan.spots.map(spot => ({
-            latitude: spot.location.lat,
-            longitude: spot.location.lng,
-          }))}
+          coordinates={decodedPolyline || fallbackCoordinates}
           strokeColor="#007AFF"
           strokeWidth={4}
         />

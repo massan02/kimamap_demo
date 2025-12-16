@@ -32,10 +32,27 @@ export interface Plan {
   totalDuration: number;
 }
 
+export interface RouteLeg {
+  startAddress: string;
+  endAddress: string;
+  distanceMeters: number;
+  durationMinutes: number;
+  polyline: string;
+}
+
+export interface RouteResult {
+  totalDistanceMeters: number;
+  totalDurationMinutes: number;
+  overviewPolyline: string;
+  legs: RouteLeg[];
+}
+
 export interface PlanResponse {
   message: string;
   request: PlanRequest;
   plan: Plan;
+  routeResult?: RouteResult;
+  isOverTime?: boolean;
 }
 
 // API Functions
