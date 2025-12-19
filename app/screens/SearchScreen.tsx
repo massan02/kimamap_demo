@@ -169,9 +169,10 @@ export default function SearchScreen() {
                   onPress={() => setTransportation(option.value)}
                 >
                   <Ionicons 
+                  //移動手段アイコン(選択されていたら色を変える)
                     name={option.icon} 
                     size={24} 
-                    color={transportation === option.value ? '#fff' : '#666'} 
+                    color={transportation === option.value ? '#C0A647' : '#666'} 
                   />
                   <Text style={[
                     styles.transportationLabel,
@@ -218,9 +219,10 @@ export default function SearchScreen() {
               <Text style={styles.subLabel}>周遊プランを作成します</Text>
             </View>
             <Switch
+              //「出発地に戻る」のON/OFF
               value={returnToStart}
               onValueChange={setReturnToStart}
-              trackColor={{ false: '#e0e0e0', true: '#007AFF' }}
+              trackColor={{ false: '#e0e0e0', true: '#FFE68C' }}
               thumbColor={'#fff'}
             />
           </View>
@@ -241,7 +243,8 @@ export default function SearchScreen() {
             ) : (
               <>
                 <Text style={styles.searchButtonText}>プランを提案してもらう</Text>
-                <Ionicons name="sparkles" size={20} color="#fff" style={{ marginLeft: 8 }} />
+                {/* 星マークのスタイル */}
+                <Ionicons name="sparkles" size={20} color="#C0A647" style={{ marginLeft: 8 }} />
               </>
             )}
           </TouchableOpacity>
@@ -283,6 +286,7 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 24,
   },
+  //出発地に戻るセクションスタイル
   rowSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -294,6 +298,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eee',
   },
+  subLabel: {
+    fontSize: 13,
+    color: '#666',
+    marginTop: 4,
+  },
+  //ラベルの文字スタイル
   label: {
     fontSize: 16,
     fontWeight: '600',
@@ -306,16 +316,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
+  //所要時間の文字スタイル
   valueLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#007AFF',
+    color: '#C0A647',
   },
-  subLabel: {
-    fontSize: 13,
-    color: '#666',
-    marginTop: 4,
+  //所要時間の選択時スタイル
+  durationButtonActive: {
+    backgroundColor: '#FFE68C',
+    borderColor: '#C0A647',
   },
+  //テキストエリアのスタイル
   textArea: {
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -330,6 +342,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
   },
+  //移動手段ボタンのスタイル
   transportationButton: {
     flex: 1,
     backgroundColor: '#fff',
@@ -339,18 +352,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eee',
   },
-  transportationButtonActive: {
-    backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
-  },
   transportationLabel: {
     marginTop: 8,
     fontSize: 12,
     fontWeight: '500',
     color: '#666',
   },
+  //移動手段の選択時スタイル
+  transportationButtonActive: {
+    backgroundColor: '#FFE68C',
+    borderColor: '#C0A647',
+  },
+  //移動手段の文字の色
   transportationLabelActive: {
-    color: '#fff',
+    color: '#C0A647',
   },
   durationContainer: {
     flexDirection: 'row',
@@ -365,16 +380,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eee',
   },
-  durationButtonActive: {
-    backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
-  },
   durationText: {
     fontSize: 14,
     color: '#666',
   },
+  //所要時間選択時のテキストスタイル
   durationTextActive: {
-    color: '#fff',
+    color: '#C0A647',
     fontWeight: '600',
   },
   footer: {
@@ -383,8 +395,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#eee',
   },
+  //プラン提案ボタンのスタイル
   searchButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FFE68C',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -400,8 +413,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#999',
     opacity: 0.6,
   },
+  //プラン提案ボタンのテキストスタイル
   searchButtonText: {
-    color: '#fff',
+    color: '#C0A647',
     fontSize: 16,
     fontWeight: 'bold',
   },
