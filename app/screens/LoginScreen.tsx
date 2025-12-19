@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -9,6 +9,9 @@ export default function LoginScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
+
+        <Image source={require('../../assets/icon.png')} style={styles.icon} />
+
         <Text style={styles.title}>Kimamap</Text>
         <Text style={styles.subtitle}>旅を始めましょう</Text>
         
@@ -31,7 +34,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFBEC',
   },
   content: {
     flex: 1,
@@ -39,6 +42,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
+
+  //アイコンスタイル
+  icon: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+  },
+
+  //テキストスタイル
   title: {
     fontSize: 32,
     fontWeight: 'bold',
@@ -51,7 +63,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   button: {
-    backgroundColor: '#4285F4',
+    backgroundColor: '#EEB244',
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 24,
