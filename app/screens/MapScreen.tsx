@@ -94,7 +94,7 @@ export default function MapScreen() {
         onPress={handleCenterLocation}
         activeOpacity={0.7}
       >
-        <MaterialIcons name="my-location" size={24} color="#007AFF" />
+        <MaterialIcons name="my-location" size={24} color="#C0A647" />
       </TouchableOpacity>
     </View>
   );
@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
+  //どこに行きますか？テキストスタイル
   searchText: {
     marginLeft: 8,
     color: '#666',
