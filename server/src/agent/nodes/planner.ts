@@ -20,7 +20,8 @@ const expectedJsonFormat = `
         "lat": "number - Latitude",
         "lng": "number - Longitude"
       },
-      "address": "string - Full address of the place"
+      "address": "string - Full address of the place",
+      "placeId": "string - The official Google Maps Place ID (must start with 'ChIJ')"
     }
   ],
   "totalDuration": "number - Estimated total duration in minutes"
@@ -54,6 +55,7 @@ Instructions:
    - Consider travel times between spots.
 3. Order them logically to create an efficient route STARTING FROM the "Starting Location".
 4. Ensure the plan is realistic and enjoyable.
+5.  **Place ID Requirements**: For each spot, you MUST provide the correct Google Maps Place ID (starting with 'ChIJ'). You can find this using the Google Maps tool. DO NOT provide a numerical CID.
 
 IMPORTANT: Return ONLY a valid JSON object.
 ${expectedJsonFormat}
@@ -99,6 +101,32 @@ ${expectedJsonFormat}
     cleaned = cleaned.trim();
 
     const planData = JSON.parse(cleaned) as Plan;
+
+    // Grounding Metadataを利用してPlace IDを補完
+    const candidate = result.candidates?.[0];
+    const groundingChunks = candidate?.groundingMetadata?.groundingChunks;
+    
+    if (groundingChunks && planData.spots) {
+      planData.spots = planData.spots.map(spot => {
+        // スポット名がgroundingChunksのtitleと一致するものがあれば、そのplaceIdを使用する
+        const chunk = groundingChunks.find(c => 
+          c.maps?.title && (
+            c.maps.title.includes(spot.name) || 
+            spot.name.includes(c.maps.title)
+          )
+        );
+        
+        if (chunk?.maps?.placeId) {
+          // "places/ChIJ..." の形式を整理
+          let pid = chunk.maps.placeId;
+          if (pid.startsWith("places/")) pid = pid.slice(7);
+          
+          console.log(`[Planner] Found grounding for ${spot.name}: ${pid}`);
+          return { ...spot, placeId: pid };
+        }
+        return spot;
+      });
+    }
 
     // Return updated state
     return {

@@ -24,6 +24,7 @@ export interface Spot {
   location: Location;
   stayDuration: number;
   address?: string;
+  placeId?: string;
 }
 
 export interface Plan {

@@ -83,24 +83,66 @@ export default function SearchResultScreen() {
     const spots = plan.spots;
     if (spots.length === 0) return;
 
+    const encode = (value: string) => encodeURIComponent(value);
+    const openUrl = (url: string) => {
+      console.log('Opening Google Maps with URL:', url);
+      Linking.openURL(url).catch(() => {
+        Alert.alert('エラー', 'Google Mapsを開けませんでした');
+      });
+    };
+
     // 出発地: ユーザーの現在地（startingLocation）を使用
     const origin = `${startingLocation.lat},${startingLocation.lng}`;
-    const destination = `${spots[spots.length - 1].location.lat},${spots[spots.length - 1].location.lng}`;
+    const destinationSpot = spots[spots.length - 1];
+    // NOTE: 緯度経度だけを渡すとGoogle Maps側で「指定した地点」表示になりやすいので、
+    // 可能なら名前/住所（+ placeId）で渡す。
+    const destinationLabel =
+      destinationSpot.name ||
+      destinationSpot.address ||
+      `${destinationSpot.location.lat},${destinationSpot.location.lng}`;
     
     // 経由地点: 最初のスポットから最後の1つ前まで全てを含める
-    const waypoints = spots.length > 1
-      ? spots.slice(0, -1).map(s => `${s.location.lat},${s.location.lng}`).join('|')
-      : '';
+    const waypointSpots = spots.length > 1 ? spots.slice(0, -1) : [];
+    const waypointsLabel = waypointSpots
+      .map(s => s.name || s.address || `${s.location.lat},${s.location.lng}`)
+      .join('|');
 
     const travelMode = getTravelMode(transportation);
-    let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=${travelMode}`;
-    if (waypoints) {
-      url += `&waypoints=${waypoints}`;
+    
+    // 基本URL
+    let url = `https://www.google.com/maps/dir/?api=1&origin=${encode(origin)}&destination=${encode(destinationLabel)}&travelmode=${encode(travelMode)}`;
+    
+    // Place ID対応: 目的地にPlace IDがあれば追加
+    if (destinationSpot.placeId) {
+      url += `&destination_place_id=${encode(destinationSpot.placeId)}`;
     }
 
-    Linking.openURL(url).catch(() => {
-      Alert.alert('エラー', 'Google Mapsを開けませんでした');
-    });
+    if (waypointsLabel) {
+      url += `&waypoints=${encode(waypointsLabel)}`;
+
+      // waypoint_place_ids は waypoints と同じ数・同じ順序で揃っている必要があるため、
+      // 全スポット分の placeId が揃っている場合のみ付与する。
+      const hasAllWaypointPlaceIds = waypointSpots.every(s => !!s.placeId);
+      if (hasAllWaypointPlaceIds) {
+        const waypointPlaceIds = waypointSpots.map(s => s.placeId as string).join('|');
+        url += `&waypoint_place_ids=${encode(waypointPlaceIds)}`;
+      }
+    }
+
+    const hasAllPlaceIds = spots.every(s => !!s.placeId);
+    if (!hasAllPlaceIds) {
+      Alert.alert(
+        'お知らせ',
+        'Place IDが揃わなかったため、Google Maps上で「指定した地点」と表示される場合があります。',
+        [
+          { text: 'キャンセル', style: 'cancel' },
+          { text: '続ける', onPress: () => openUrl(url) },
+        ]
+      );
+      return;
+    }
+
+    openUrl(url);
   };
 
   return (
