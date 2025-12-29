@@ -12,6 +12,7 @@ export interface Spot {
     lng: number;
   };
   address: string;
+  placeId: string;
 }
 
 // Define the structure of the Plan
