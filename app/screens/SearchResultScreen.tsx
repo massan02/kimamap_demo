@@ -147,27 +147,6 @@ export default function SearchResultScreen() {
     openUrl(url);
   };
 
-  // 現在地に地図を移動
-  const handleCenterToCurrentLocation = async () => {
-    try {
-      const { status } = await ExpoLocation.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('位置情報エラー', '現在地を取得するために位置情報の許可が必要です。');
-        return;
-      }
-
-      const currentLocation = await ExpoLocation.getCurrentPositionAsync({});
-      mapRef.current?.animateToRegion({
-        latitude: currentLocation.coords.latitude,
-        longitude: currentLocation.coords.longitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-      }, 1000);
-    } catch (error) {
-      console.error('Error centering to current location:', error);
-      Alert.alert('エラー', '現在地の取得に失敗しました。');
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -183,6 +162,12 @@ export default function SearchResultScreen() {
         }}
         showsUserLocation={true}
         showsMyLocationButton={true}
+        mapPadding={{ 
+          top: insets.top, 
+          right: 0, 
+          bottom: 255 + insets.bottom, // 詳細パネル分空ける
+          left: 0 
+        }}
       >
         <Polyline
           coordinates={decodedPolyline || fallbackCoordinates}
@@ -207,17 +192,6 @@ export default function SearchResultScreen() {
           </Marker>
         ))}
       </MapView>
-
-      {/* Floating Action Buttons */}
-      <View style={[styles.fabContainer, { bottom: 230 + insets.bottom }]}>
-        <TouchableOpacity 
-          style={styles.fab} 
-          onPress={handleCenterToCurrentLocation}
-          activeOpacity={0.7}
-        >
-          <MaterialIcons name="my-location" size={24} color="#007AFF" />
-        </TouchableOpacity>
-      </View>
 
       {/* Header / Back Button */}
       <TouchableOpacity 
@@ -389,24 +363,5 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent',
     borderTopColor: '#007AFF',
     transform: [{ translateY: -2 }],
-  },
-  fabContainer: {
-    position: 'absolute',
-    right: 16,
-    flexDirection: 'column',
-    gap: 12,
-  },
-  fab: {
-    width: 48,
-    height: 48,
-    backgroundColor: 'white',
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
   },
 });
