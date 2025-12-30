@@ -144,9 +144,12 @@ export default function SearchScreen() {
           <View style={{ width: 24 }} /> 
         </View>
 
-        <ScrollView contentContainerStyle={styles.content}>
+        <ScrollView 
+          contentContainerStyle={styles.content}
+          pointerEvents={loading ? 'none' : 'auto'}
+        >
           {/* Query Section */}
-          <View style={styles.section}>
+          <View style={[styles.section, loading && styles.disabledSection]}>
             <Text style={styles.label}>行きたい場所・やりたいこと</Text>
             <TextInput
               style={styles.textArea}
@@ -157,11 +160,12 @@ export default function SearchScreen() {
               value={query}
               onChangeText={setQuery}
               textAlignVertical="top"
+              editable={!loading}
             />
           </View>
 
           {/* Transportation Section */}
-          <View style={styles.section}>
+          <View style={[styles.section, loading && styles.disabledSection]}>
             <Text style={styles.label}>移動手段</Text>
             <View style={styles.transportationContainer}>
               {TRANSPORTATION_OPTIONS.map((option) => (
@@ -172,6 +176,7 @@ export default function SearchScreen() {
                     transportation === option.value && styles.transportationButtonActive
                   ]}
                   onPress={() => setTransportation(option.value)}
+                  disabled={loading}
                 >
                   <Ionicons 
                     name={option.icon} 
@@ -190,7 +195,7 @@ export default function SearchScreen() {
           </View>
 
           {/* Duration Section */}
-          <View style={styles.section}>
+          <View style={[styles.section, loading && styles.disabledSection]}>
             <View style={styles.labelRow}>
               <Text style={styles.label}>所要時間</Text>
               <Text style={styles.valueLabel}>{Math.floor(duration / 60)}時間{duration % 60 > 0 ? ` ${duration % 60}分` : ''}</Text>
@@ -204,6 +209,7 @@ export default function SearchScreen() {
                     duration === preset.value && styles.durationButtonActive
                   ]}
                   onPress={() => setDuration(preset.value)}
+                  disabled={loading}
                 >
                   <Text style={[
                     styles.durationText,
@@ -217,7 +223,7 @@ export default function SearchScreen() {
           </View>
 
           {/* Return to Start Section */}
-          <View style={styles.rowSection}>
+          <View style={[styles.rowSection, loading && styles.disabledSection]}>
             <View>
               <Text style={styles.label}>出発地に戻る</Text>
               <Text style={styles.subLabel}>周遊プランを作成します</Text>
@@ -227,6 +233,7 @@ export default function SearchScreen() {
               onValueChange={setReturnToStart}
               trackColor={{ false: '#e0e0e0', true: '#007AFF' }}
               thumbColor={'#fff'}
+              disabled={loading}
             />
           </View>
 
@@ -409,5 +416,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  disabledSection: {
+    opacity: 0.5,
   },
 });
