@@ -34,32 +34,6 @@ export default function MapScreen() {
     })();
   }, []);
 
-  const handleCenterLocation = () => {
-    if (currentLocation && mapRef.current) {
-      mapRef.current.animateToRegion({
-        latitude: currentLocation.coords.latitude,
-        longitude: currentLocation.coords.longitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-      }, 1000);
-    } else {
-      // If no location yet, try fetching again or alert
-      (async () => {
-        try {
-          let location = await Location.getCurrentPositionAsync({});
-          setCurrentLocation(location);
-          mapRef.current?.animateToRegion({
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-          }, 1000);
-        } catch (e) {
-          Alert.alert('Could not get current location');
-        }
-      })();
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -74,6 +48,7 @@ export default function MapScreen() {
           longitudeDelta: 0.01,
         }}
         showsUserLocation={true}
+        showsMyLocationButton={true}
       >
       </MapView>
       
@@ -88,14 +63,6 @@ export default function MapScreen() {
         <MaterialIcons name="search" size={24} color="#666" />
         <Text style={styles.searchText}>どこに行きますか？</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={handleCenterLocation}
-        activeOpacity={0.7}
-      >
-        <MaterialIcons name="my-location" size={24} color="#007AFF" />
-      </TouchableOpacity>
     </View>
   );
 }
@@ -107,25 +74,6 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
-  },
-  fab: {
-    position: 'absolute',
-    right: 16,
-    bottom: 16, // Adjust if there's a tab bar, usually tab bar height is around 50-80
-    backgroundColor: 'white',
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   searchContainer: {
     position: 'absolute',
